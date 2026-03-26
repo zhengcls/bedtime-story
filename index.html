@@ -18,8 +18,6 @@ canvas#bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0}
 .ch-btn.active{background:#ffd700;color:#0a0a2e;font-weight:700;border-color:#ffd700}
 .ch-btn:hover{transform:scale(1.1)}
 .text-box{min-height:160px;font-size:20px;line-height:2;color:rgba(255,255,255,.9);text-align:center;padding:10px 0;letter-spacing:1px}
-.text-box .cursor{display:inline-block;width:2px;height:20px;background:#ffd700;vertical-align:middle;animation:blink 1s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 .controls{display:flex;gap:12px;justify-content:center;margin-top:20px;flex-wrap:wrap}
 .btn{padding:10px 24px;border-radius:20px;border:1px solid rgba(255,215,0,.4);background:rgba(255,215,0,.1);color:#ffd700;font-size:15px;cursor:pointer;transition:all .3s;white-space:nowrap}
 .btn:hover{background:rgba(255,215,0,.25);transform:translateY(-1px)}
@@ -105,7 +103,7 @@ function loadChapter(i) {
   isPlaying = false;
   isPaused = false;
   document.getElementById('playBtn').textContent = '开始朗读';
-  document.getElementById('textBox').innerHTML = '<span class="cursor"></span>';
+  document.getElementById('textBox').textContent = '';
   updateNav();
   updateProgress();
 }
@@ -150,47 +148,11 @@ function togglePlay() {
   }
 }
 
-let animFrame = null;
-let targetChar = 0;  // boundary告诉我们的目标位置
-let animStart = 0;   // 动画开始时间
-let animFrom = 0;    // 动画起始位置
-
-function smoothStep(t) {
-  return t * t * (3 - 2 * t); // smoothstep缓动
-}
-
-function animateText(text) {
-  const now = Date.now();
-  const elapsed = now - animStart;
-  const duration = 180; // 每次跳字的过渡时间(ms)
-  const t = Math.min(elapsed / duration, 1);
-  const eased = smoothStep(t);
-
-  charIndex = Math.round(animFrom + (targetChar - animFrom) * eased);
-  charIndex = Math.min(charIndex, text.length);
-  renderText(text);
-
-  if (t < 1 && charIndex < text.length) {
-    animFrame = requestAnimationFrame(() => animateText(text));
-  }
-}
-
-function moveToChar(newTarget, text) {
-  if (newTarget === charIndex) return;
-  animFrom = charIndex;
-  targetChar = newTarget;
-  animStart = Date.now();
-  if (animFrame) cancelAnimationFrame(animFrame);
-  animFrame = requestAnimationFrame(() => animateText(text));
-}
-
 function startPlay() {
   if (synth.speaking) synth.cancel();
-  if (animFrame) cancelAnimationFrame(animFrame);
   const text = story.chapters[currentCh];
-  charIndex = 0;
-  targetChar = 0;
-  animFrom = 0;
+  // 直接显示全部文字
+  document.getElementById('textBox').textContent = text;
   isPlaying = true;
   isPaused = false;
   document.getElementById('playBtn').textContent = '暂停';
@@ -201,29 +163,7 @@ function startPlay() {
   utterance.pitch = 1.1;
   if (voice) utterance.voice = voice;
 
-  let hasBoundary = false;
-  utterance.onboundary = (e) => {
-    if (e.name === 'word' || e.name === 'sentence') {
-      hasBoundary = true;
-      moveToChar(e.charIndex, text);
-    }
-  };
-
-  // fallback：如果没有boundary事件，用估算推进
-  const startTime = Date.now();
-  let fbTimer = setInterval(() => {
-    if (hasBoundary || charIndex >= text.length) { clearInterval(fbTimer); return; }
-    const elapsed = (Date.now() - startTime) / 1000;
-    const estimated = Math.min(Math.floor(elapsed * rate * 3.2), text.length);
-    moveToChar(estimated, text);
-    if (charIndex >= text.length) clearInterval(fbTimer);
-  }, 200);
-
   utterance.onend = () => {
-    clearInterval(fbTimer);
-    if (animFrame) cancelAnimationFrame(animFrame);
-    charIndex = text.length;
-    renderText(text);
     if (currentCh < story.chapters.length - 1) {
       setTimeout(() => {
         currentCh++;
@@ -252,17 +192,10 @@ function startPlay() {
   renderText(text);
 }
 
-function renderText(text) {
-  const shown = text.substring(0, charIndex);
-  document.getElementById('textBox').innerHTML = shown + '<span class="cursor"></span>';
-}
 
-function stopSpeech() {
-  synth.cancel();
-  if (animFrame) cancelAnimationFrame(animFrame);
-  isPlaying = false;
-  isPaused = false;
-}
+
+
+function stopSpeech() { synth.cancel(); isPlaying = false; isPaused = false; }
 function prevChapter() { if (currentCh > 0) { stopSpeech(); loadChapter(currentCh - 1); } }
 function nextChapter() { if (currentCh < story.chapters.length - 1) { stopSpeech(); loadChapter(currentCh + 1); } }
 
