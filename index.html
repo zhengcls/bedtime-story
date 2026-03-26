@@ -150,10 +150,47 @@ function togglePlay() {
   }
 }
 
+let animFrame = null;
+let targetChar = 0;  // boundary告诉我们的目标位置
+let animStart = 0;   // 动画开始时间
+let animFrom = 0;    // 动画起始位置
+
+function smoothStep(t) {
+  return t * t * (3 - 2 * t); // smoothstep缓动
+}
+
+function animateText(text) {
+  const now = Date.now();
+  const elapsed = now - animStart;
+  const duration = 180; // 每次跳字的过渡时间(ms)
+  const t = Math.min(elapsed / duration, 1);
+  const eased = smoothStep(t);
+
+  charIndex = Math.round(animFrom + (targetChar - animFrom) * eased);
+  charIndex = Math.min(charIndex, text.length);
+  renderText(text);
+
+  if (t < 1 && charIndex < text.length) {
+    animFrame = requestAnimationFrame(() => animateText(text));
+  }
+}
+
+function moveToChar(newTarget, text) {
+  if (newTarget === charIndex) return;
+  animFrom = charIndex;
+  targetChar = newTarget;
+  animStart = Date.now();
+  if (animFrame) cancelAnimationFrame(animFrame);
+  animFrame = requestAnimationFrame(() => animateText(text));
+}
+
 function startPlay() {
   if (synth.speaking) synth.cancel();
+  if (animFrame) cancelAnimationFrame(animFrame);
   const text = story.chapters[currentCh];
   charIndex = 0;
+  targetChar = 0;
+  animFrom = 0;
   isPlaying = true;
   isPaused = false;
   document.getElementById('playBtn').textContent = '暂停';
@@ -164,31 +201,27 @@ function startPlay() {
   utterance.pitch = 1.1;
   if (voice) utterance.voice = voice;
 
-  let lastBoundaryChar = -1;
+  let hasBoundary = false;
   utterance.onboundary = (e) => {
-    if (e.name === 'word') {
-      lastBoundaryChar = e.charIndex;
-      charIndex = e.charIndex;
-      renderText(text);
+    if (e.name === 'word' || e.name === 'sentence') {
+      hasBoundary = true;
+      moveToChar(e.charIndex, text);
     }
   };
 
+  // fallback：如果没有boundary事件，用估算推进
   const startTime = Date.now();
   let fbTimer = setInterval(() => {
-    if (lastBoundaryChar > 0) {
-      // boundary事件正常工作，不再用fallback
-      if (charIndex >= text.length) clearInterval(fbTimer);
-      return;
-    }
+    if (hasBoundary || charIndex >= text.length) { clearInterval(fbTimer); return; }
     const elapsed = (Date.now() - startTime) / 1000;
     const estimated = Math.min(Math.floor(elapsed * rate * 3.2), text.length);
-    charIndex = estimated;
-    renderText(text);
+    moveToChar(estimated, text);
     if (charIndex >= text.length) clearInterval(fbTimer);
-  }, 80);
+  }, 200);
 
   utterance.onend = () => {
     clearInterval(fbTimer);
+    if (animFrame) cancelAnimationFrame(animFrame);
     charIndex = text.length;
     renderText(text);
     if (currentCh < story.chapters.length - 1) {
@@ -224,7 +257,12 @@ function renderText(text) {
   document.getElementById('textBox').innerHTML = shown + '<span class="cursor"></span>';
 }
 
-function stopSpeech() { synth.cancel(); isPlaying = false; isPaused = false; }
+function stopSpeech() {
+  synth.cancel();
+  if (animFrame) cancelAnimationFrame(animFrame);
+  isPlaying = false;
+  isPaused = false;
+}
 function prevChapter() { if (currentCh > 0) { stopSpeech(); loadChapter(currentCh - 1); } }
 function nextChapter() { if (currentCh < story.chapters.length - 1) { stopSpeech(); loadChapter(currentCh + 1); } }
 
