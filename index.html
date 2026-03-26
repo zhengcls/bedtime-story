@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>宝贝晚安 · 睡前故事</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -11,18 +10,15 @@ body{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;b
 .wrap{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;min-height:100vh;padding:20px 16px}
 .title{font-size:26px;font-weight:700;background:linear-gradient(135deg,#ffd700,#ffb347);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:16px 0 4px}
 .subtitle{font-size:13px;color:rgba(255,255,255,.45);margin-bottom:18px}
-.card{background:rgba(255,255,255,.06);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:24px 20px;max-width:560px;width:100%}
+.card{background:rgba(255,255,255,.06);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:24px 20px;max-width:560px;width:100%}
 .story-title{font-size:20px;font-weight:600;color:#ffd700;text-align:center;margin-bottom:4px}
 .chapter-nav{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:12px 0 16px}
-.ch-btn{width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,215,0,.3);background:rgba(255,215,0,.08);color:#ffd700;font-size:13px;cursor:pointer;transition:all .3s;-webkit-appearance:none;appearance:none}
+.ch-btn{width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,215,0,.3);background:rgba(255,215,0,.08);color:#ffd700;font-size:13px;cursor:pointer;-webkit-appearance:none;appearance:none}
 .ch-btn.active{background:#ffd700;color:#0a0a2e;font-weight:700;border-color:#ffd700}
-.ch-btn:active{transform:scale(.92)}
 .text-box{min-height:140px;font-size:19px;line-height:2;color:rgba(255,255,255,.88);text-align:center;padding:8px 0;letter-spacing:.5px}
 .controls{display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap}
-.btn{padding:10px 22px;border-radius:18px;border:1px solid rgba(255,215,0,.4);background:rgba(255,215,0,.1);color:#ffd700;font-size:15px;cursor:pointer;transition:all .2s;white-space:nowrap;-webkit-appearance:none;appearance:none}
-.btn:active{transform:scale(.95);background:rgba(255,215,0,.25)}
+.btn{padding:10px 22px;border-radius:18px;border:1px solid rgba(255,215,0,.4);background:rgba(255,215,0,.1);color:#ffd700;font-size:15px;cursor:pointer;white-space:nowrap;-webkit-appearance:none;appearance:none}
 .btn.primary{background:#ffd700;color:#0a0a2e;font-weight:600;border-color:#ffd700}
-.btn.primary:active{background:#e6c200}
 .progress{display:flex;align-items:center;gap:8px;margin-top:14px;font-size:12px;color:rgba(255,255,255,.4)}
 .prog-bar{flex:1;height:3px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden}
 .prog-fill{height:100%;background:linear-gradient(90deg,#ffd700,#ffb347);width:0;transition:width .3s}
@@ -31,13 +27,13 @@ body{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;b
 </head>
 <body>
 <div class="wrap">
-  <div class="title">🌙 宝贝晚安</div>
+  <div class="title">&#x1F319; 宝贝晚安</div>
   <div class="subtitle">今日睡前故事</div>
   <div class="card">
     <div class="story-title" id="storyTitle">月光森林的小精灵</div>
     <div class="chapter-nav" id="chNav"></div>
     <div class="text-box" id="textBox"></div>
-    <div class="loading" id="loading">⏳ 音频加载中...</div>
+    <div class="loading" id="loading">&#x23F3; 音频加载中...</div>
     <div class="controls">
       <button class="btn primary" id="playBtn">开始朗读</button>
       <button class="btn" id="prevBtn">上一章</button>
@@ -51,168 +47,167 @@ body{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;b
 </div>
 
 <script>
-(function() {
-  'use strict';
+var storyTitle = '\u6708\u5149\u68ee\u6797\u7684\u5c0f\u7cbe\u7075';
+var chapters = [
+  '\u5728\u5f88\u8fdc\u5f88\u8fdc\u7684\u6708\u5149\u68ee\u6797\u6df1\u5904\uff0c\u4f4f\u7740\u4e00\u53ea\u53ea\u6709\u5df4\u638c\u5927\u7684\u5c0f\u7cbe\u7075\uff0c\u5979\u7684\u540d\u5b57\u53eb\u8c46\u8c46\u3002\u8c46\u8c46\u6709\u4e00\u5bf9\u900f\u660e\u4eae\u6676\u6676\u7684\u7fc5\u8180\uff0c\u6bcf\u5230\u591c\u665a\u5c31\u4f1a\u53d1\u51fa\u6de1\u6de1\u7684\u94f6\u8272\u5149\u8292\uff0c\u50cf\u4e00\u76cf\u5c0f\u5c0f\u7684\u706f\u7b3c\u3002\u5979\u6700\u559c\u6b22\u505a\u7684\u4e8b\uff0c\u5c31\u662f\u5750\u5728\u6700\u9ad8\u7684\u90a3\u68f5\u6a61\u6811\u4e0a\uff0c\u5bf9\u7740\u6708\u4eae\u5f39\u5979\u7684\u6708\u4eae\u7434\u3002',
+  '\u4e00\u5929\u665a\u4e0a\uff0c\u8c46\u8c46\u6b63\u5728\u5f39\u7434\uff0c\u5ffd\u7136\u542c\u5230\u4e00\u9635\u8f7b\u8f7b\u7684\u54ed\u58f0\u3002\u5979\u5faa\u7740\u58f0\u97f3\u98de\u8fc7\u53bb\uff0c\u53d1\u73b0\u4e00\u53ea\u5c0f\u677e\u9f20\u8e72\u5728\u5927\u8611\u83c7\u4e0b\u9762\u53d1\u6296\u3002\u5c0f\u677e\u9f20\u7684\u773c\u6cea\u50cf\u73cd\u73e0\u4e00\u6837\u6ef4\u843d\u5728\u8349\u53f6\u4e0a\uff0c\u201c\u6211\u8ff7\u8def\u4e86\uff0c\u627e\u4e0d\u5230\u56de\u5bb6\u7684\u65b9\u5411\u2026\u2026\u201d\u5c0f\u677e\u9f20\u62bd\u6ce3\u7740\u8bf4\u3002',
+  '\u201c\u522b\u6015\u522b\u6015\uff0c\u6211\u6765\u9001\u4f60\u56de\u5bb6\u3002\u201d\u8c46\u8c46\u6e29\u67d4\u5730\u62cd\u4e86\u62cd\u5c0f\u677e\u9f20\u7684\u8111\u888b\uff0c\u7528\u95ea\u4eae\u7684\u7fc5\u8180\u8f7b\u8f7b\u62b1\u4e86\u62b1\u5b83\u3002\u5c0f\u677e\u9f20\u64e6\u4e86\u64e6\u773c\u6cea\uff0c\u9732\u51fa\u4e00\u4e2a\u5c0f\u5c0f\u7684\u7b11\u5bb9\uff0c\u7d27\u7d27\u8ddf\u5728\u8c46\u8c46\u8eab\u540e\uff0c\u4e00\u8d77\u51fa\u53d1\u4e86\u3002',
+  '\u56de\u5bb6\u7684\u8def\u4e0a\uff0c\u4ed6\u4eec\u7ecf\u8fc7\u4e86\u4e00\u7247\u8424\u706b\u866b\u8349\u5730\u3002\u6210\u5343\u4e0a\u4e07\u7684\u8424\u706b\u866b\u540c\u65f6\u4eae\u8d77\u5c0f\u706f\uff0c\u50cf\u6ee1\u5929\u661f\u661f\u843d\u5728\u4e86\u5730\u4e0a\uff0c\u7f8e\u5f97\u8ba9\u4eba\u5c4f\u4f4f\u4e86\u547c\u5438\u3002\u5c0f\u677e\u9f20\u5f00\u5fc3\u5730\u8e66\u8e66\u8df3\u8df3\uff0c\u628a\u8ff7\u8def\u7684\u5bb3\u6015\u5168\u90fd\u5fd8\u5149\u4e86\u3002',
+  '\u7ec8\u4e8e\u5230\u4e86\u5c0f\u677e\u9f20\u7684\u5bb6\u3002\u677e\u9f20\u5988\u5988\u7d27\u7d27\u62b1\u4f4f\u4e86\u5c0f\u677e\u9f20\uff0c\u6fc0\u52a8\u5f97\u8bf4\u4e0d\u51fa\u8bdd\u6765\u3002\u5979\u62ff\u51fa\u6700\u751c\u7684\u677e\u679c\u9001\u7ed9\u8c46\u8c46\uff0c\u201c\u8c22\u8c22\u4f60\uff0c\u5584\u826f\u7684\u5c0f\u7cbe\u7075\uff01\u201d\u8c46\u8c46\u5f00\u5fc3\u5730\u6446\u6446\u624b\uff0c\u98de\u56de\u4e86\u5979\u7684\u6a61\u6811\u4e0a\uff0c\u7ee7\u7eed\u5f39\u8d77\u4e86\u6708\u4eae\u7434\u3002',
+  '\u591c\u6e10\u6e10\u6df1\u4e86\uff0c\u6708\u5149\u6e29\u67d4\u5730\u6d12\u6ee1\u4e86\u6574\u5ea7\u68ee\u6797\u3002\u8c46\u8c46\u6253\u4e86\u4e2a\u5c0f\u5c0f\u7684\u54c8\u6b20\uff0c\u6536\u8d77\u900f\u660e\u7684\u7fc5\u8180\uff0c\u8720\u7f29\u5728\u4e00\u7247\u67d4\u8f6f\u7684\u82b1\u74e3\u4e0a\u3002\u201c\u665a\u5b89\uff0c\u6708\u5149\u68ee\u6797\u3002\u665a\u5b89\uff0c\u5c0f\u677e\u9f20\u3002\u201d\u5979\u8f7b\u8f7b\u5730\u8bf4\u7740\uff0c\u5634\u89d2\u5e26\u7740\u5fae\u7b11\uff0c\u751c\u751c\u5730\u8fdb\u5165\u4e86\u68a6\u4e61\u3002'
+];
 
-  var story = {
-    title: "月光森林的小精灵",
-    chapters: [
-      "在很远很远的月光森林深处，住着一只只有巴掌大的小精灵，她的名字叫豆豆。豆豆有一对透明亮晶晶的翅膀，每到夜晚就会发出淡淡的银色光芒，像一盏小小的灯笼。她最喜欢做的事，就是坐在最高的那棵橡树上，对着月亮弹她的月亮琴。",
-      "一天晚上，豆豆正在弹琴，忽然听到一阵轻轻的哭声。她循着声音飞过去，发现一只小松鼠蹲在大蘑菇下面发抖。小松鼠的眼泪像珍珠一样滴落在草叶上，"我迷路了，找不到回家的方向……"小松鼠抽泣着说。",
-      ""别怕别怕，我来送你回家。"豆豆温柔地拍了拍小松鼠的脑袋，用闪亮的翅膀轻轻抱了抱它。小松鼠擦了擦眼泪，露出一个小小的笑容，紧紧跟在豆豆身后，一起出发了。",
-      "回家的路上，他们经过了一片萤火虫草地。成千上万的萤火虫同时亮起小灯，像满天星星落在了地上，美得让人屏住了呼吸。小松鼠开心地蹦蹦跳跳，把迷路的害怕全都忘光了。",
-      "终于到了小松鼠的家。松鼠妈妈紧紧抱住了小松鼠，激动得说不出话来。她拿出最甜的松果送给豆豆，"谢谢你，善良的小精灵！"豆豆开心地摆摆手，飞回了她的橡树上，继续弹起了月亮琴。",
-      "夜渐渐深了，月光温柔地洒满了整座森林。豆豆打了个小小的哈欠，收起透明的翅膀，蜷缩在一片柔软的花瓣上。"晚安，月光森林。晚安，小松鼠。"她轻轻地说着，嘴角带着微笑，甜甜地进入了梦乡。"
-    ]
-  };
+var currentCh = 0;
+var isPlaying = false;
+var audio = document.getElementById('audio') || new Audio();
+var playBtn = document.getElementById('playBtn');
+var prevBtn = document.getElementById('prevBtn');
+var nextBtn = document.getElementById('nextBtn');
+var textBox = document.getElementById('textBox');
+var loadingEl = document.getElementById('loading');
 
-  var currentCh = 0;
-  var isPlaying = false;
-  var audio = new Audio();
+function setText(id, txt) {
+  var el = document.getElementById(id);
+  if (el) el.textContent = txt;
+}
 
-  // 微信兼容：不在初始化时设置src，等用户点击时才加载
-  var playBtn = document.getElementById('playBtn');
-  var prevBtn = document.getElementById('prevBtn');
-  var nextBtn = document.getElementById('nextBtn');
-  var textBox = document.getElementById('textBox');
-  var loading = document.getElementById('loading');
-
-  function init() {
-    document.getElementById('storyTitle').textContent = story.title;
+function init() {
+  try {
+    setText('storyTitle', storyTitle);
     buildNav();
     loadChapter(0);
+  } catch(e) {
+    document.body.innerHTML = '<p style="color:red;padding:20px;">Error: ' + e.message + '</p>';
   }
+}
 
-  function buildNav() {
-    var nav = document.getElementById('chNav');
-    nav.innerHTML = '';
-    for (var i = 0; i < story.chapters.length; i++) {
-      (function(idx) {
-        var b = document.createElement('button');
-        b.className = 'ch-btn' + (idx === currentCh ? ' active' : '');
-        b.textContent = idx + 1;
-        b.addEventListener('click', function() {
-          stopAudio();
-          loadChapter(idx);
-        });
-        nav.appendChild(b);
-      })(i);
-    }
-  }
-
-  function loadChapter(i) {
-    currentCh = i;
-    isPlaying = false;
-    audio.pause();
-    audio.currentTime = 0;
-    audio.src = '';
-    playBtn.textContent = '开始朗读';
-    textBox.textContent = story.chapters[i];
-    updateNav();
-    updateProgress();
-    loading.style.display = 'none';
-  }
-
-  function updateNav() {
-    var btns = document.querySelectorAll('.ch-btn');
-    for (var i = 0; i < btns.length; i++) {
-      if (i === currentCh) {
-        btns[i].classList.add('active');
-      } else {
-        btns[i].classList.remove('active');
-      }
-    }
-  }
-
-  function updateProgress() {
-    document.getElementById('progText').textContent = '第 ' + (currentCh + 1) + ' / ' + story.chapters.length + ' 章';
-    document.getElementById('progFill').style.width = (currentCh / story.chapters.length * 100) + '%';
-  }
-
-  function doPlay() {
-    // 先设置src（如果还没设置）
-    if (!audio.src || audio.src === '') {
-      audio.src = 'audio/ch' + (currentCh + 1) + '.mp3';
-    }
-    loading.style.display = 'block';
-    var playPromise = audio.play();
-    // 微信兼容：play() 可能返回 undefined
-    if (playPromise && typeof playPromise.then === 'function') {
-      playPromise.then(function() {
-        isPlaying = true;
-        playBtn.textContent = '暂停';
-        loading.style.display = 'none';
-      }).catch(function(e) {
-        console.warn('play failed:', e.message || e);
-        loading.style.display = 'none';
+function buildNav() {
+  var nav = document.getElementById('chNav');
+  if (!nav) return;
+  nav.innerHTML = '';
+  for (var i = 0; i < chapters.length; i++) {
+    (function(idx) {
+      var b = document.createElement('button');
+      b.className = 'ch-btn' + (idx === currentCh ? ' active' : '');
+      b.textContent = idx + 1;
+      b.setAttribute('data-ch', idx);
+      b.addEventListener('click', function() {
+        stopAudio();
+        loadChapter(idx);
       });
+      nav.appendChild(b);
+    })(i);
+  }
+}
+
+function loadChapter(i) {
+  currentCh = i;
+  isPlaying = false;
+  audio.pause();
+  audio.currentTime = 0;
+  audio.removeAttribute('src');
+  audio.load();
+  playBtn.textContent = '\u5F00\u59CB\u6717\u8BFB';
+  setText('textBox', chapters[i]);
+  updateNav();
+  updateProgress();
+  if (loadingEl) loadingEl.style.display = 'none';
+}
+
+function updateNav() {
+  var btns = document.querySelectorAll('.ch-btn');
+  for (var i = 0; i < btns.length; i++) {
+    if (i === currentCh) {
+      btns[i].className = 'ch-btn active';
     } else {
-      // 老浏览器直接设置
+      btns[i].className = 'ch-btn';
+    }
+  }
+}
+
+function updateProgress() {
+  setText('progText', '\u7B2C ' + (currentCh + 1) + ' / ' + chapters.length + ' \u7AE0');
+  var fill = document.getElementById('progFill');
+  if (fill) fill.style.width = (currentCh / chapters.length * 100) + '%';
+}
+
+function doPlay() {
+  var src = 'audio/ch' + (currentCh + 1) + '.mp3';
+  if (audio.getAttribute('data-current') !== src) {
+    audio.src = src;
+    audio.setAttribute('data-current', src);
+    if (loadingEl) loadingEl.style.display = 'block';
+  }
+  var p = audio.play();
+  if (p && typeof p.then === 'function') {
+    p.then(function() {
       isPlaying = true;
-      playBtn.textContent = '暂停';
-      loading.style.display = 'none';
-    }
+      playBtn.textContent = '\u6682\u505C';
+      if (loadingEl) loadingEl.style.display = 'none';
+    }).catch(function() {
+      if (loadingEl) loadingEl.style.display = 'none';
+    });
+  } else {
+    isPlaying = true;
+    playBtn.textContent = '\u6682\u505C';
+    if (loadingEl) loadingEl.style.display = 'none';
   }
+}
 
-  // 微信兼容：所有音频操作必须绑定在用户点击事件链上
-  playBtn.addEventListener('click', function(e) {
-    e.preventDefault();
-    if (!isPlaying) {
-      // 如果当前章节已播放完，重置
-      if (audio.ended || audio.currentTime >= audio.duration) {
-        audio.currentTime = 0;
-      }
-      doPlay();
-    } else {
-      audio.pause();
-      isPlaying = false;
-      playBtn.textContent = '继续';
-    }
-  });
-
-  prevBtn.addEventListener('click', function(e) {
-    e.preventDefault();
-    if (currentCh > 0) { stopAudio(); loadChapter(currentCh - 1); }
-  });
-
-  nextBtn.addEventListener('click', function(e) {
-    e.preventDefault();
-    if (currentCh < story.chapters.length - 1) { stopAudio(); loadChapter(currentCh + 1); }
-  });
-
-  // 微信兼容：ended事件中不能自动play，改为提示用户点击
-  audio.addEventListener('ended', function() {
-    isPlaying = false;
-    if (currentCh < story.chapters.length - 1) {
-      // 切到下一章，但等用户手动点击播放
-      currentCh++;
-      buildNav();
-      updateProgress();
-      loadChapter(currentCh);
-      playBtn.textContent = '▶ 继续下一章';
-    } else {
-      document.getElementById('progFill').style.width = '100%';
-      playBtn.textContent = '重新播放';
-      currentCh = 0;
-      buildNav();
-      updateProgress();
-    }
-  });
-
-  // canplay事件隐藏loading
-  audio.addEventListener('canplay', function() {
-    loading.style.display = 'none';
-  });
-
-  function stopAudio() {
+playBtn.addEventListener('click', function(e) {
+  if (e) e.preventDefault();
+  if (!isPlaying) {
+    if (audio.ended) audio.currentTime = 0;
+    doPlay();
+  } else {
     audio.pause();
-    audio.currentTime = 0;
-    audio.src = '';
     isPlaying = false;
+    playBtn.textContent = '\u7EE7\u7EED';
   }
+});
 
-  init();
-})();
+prevBtn.addEventListener('click', function(e) {
+  if (e) e.preventDefault();
+  if (currentCh > 0) { stopAudio(); loadChapter(currentCh - 1); }
+});
+
+nextBtn.addEventListener('click', function(e) {
+  if (e) e.preventDefault();
+  if (currentCh < chapters.length - 1) { stopAudio(); loadChapter(currentCh + 1); }
+});
+
+audio.addEventListener('ended', function() {
+  isPlaying = false;
+  if (currentCh < chapters.length - 1) {
+    currentCh++;
+    buildNav();
+    updateProgress();
+    loadChapter(currentCh);
+    playBtn.textContent = '\u25B6 \u7EE7\u7EED\u4E0B\u4E00\u7AE0';
+  } else {
+    var fill = document.getElementById('progFill');
+    if (fill) fill.style.width = '100%';
+    playBtn.textContent = '\u91CD\u65B0\u64AD\u653E';
+    currentCh = 0;
+    buildNav();
+    updateProgress();
+  }
+});
+
+audio.addEventListener('canplay', function() {
+  if (loadingEl) loadingEl.style.display = 'none';
+});
+
+function stopAudio() {
+  audio.pause();
+  audio.currentTime = 0;
+  audio.removeAttribute('src');
+  audio.removeAttribute('data-current');
+  audio.load();
+  isPlaying = false;
+}
+
+init();
 </script>
 </body>
 </html>
