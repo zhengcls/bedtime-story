@@ -2,44 +2,46 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>宝贝晚安 · 睡前故事</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#0a0a2e;color:#fff;min-height:100vh;overflow-x:hidden}
-canvas#bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0}
-.wrap{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;min-height:100vh;padding:20px}
-.title{font-size:28px;font-weight:700;background:linear-gradient(135deg,#ffd700,#ffb347);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:20px 0 5px}
-.subtitle{font-size:14px;color:rgba(255,255,255,.5);margin-bottom:20px}
-.card{background:rgba(255,255,255,.06);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.1);border-radius:24px;padding:30px;max-width:600px;width:100%}
-.story-title{font-size:22px;font-weight:600;color:#ffd700;text-align:center;margin-bottom:6px}
-.chapter-nav{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:12px 0 20px}
-.ch-btn{width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,215,0,.3);background:rgba(255,215,0,.08);color:#ffd700;font-size:13px;cursor:pointer;transition:all .3s}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:#0a0a2e;color:#fff;min-height:100vh;overflow-x:hidden}
+.wrap{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;min-height:100vh;padding:20px 16px}
+.title{font-size:26px;font-weight:700;background:linear-gradient(135deg,#ffd700,#ffb347);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:16px 0 4px}
+.subtitle{font-size:13px;color:rgba(255,255,255,.45);margin-bottom:18px}
+.card{background:rgba(255,255,255,.06);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:24px 20px;max-width:560px;width:100%}
+.story-title{font-size:20px;font-weight:600;color:#ffd700;text-align:center;margin-bottom:4px}
+.chapter-nav{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:12px 0 16px}
+.ch-btn{width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,215,0,.3);background:rgba(255,215,0,.08);color:#ffd700;font-size:13px;cursor:pointer;transition:all .3s;-webkit-appearance:none;appearance:none}
 .ch-btn.active{background:#ffd700;color:#0a0a2e;font-weight:700;border-color:#ffd700}
-.ch-btn:hover{transform:scale(1.1)}
-.text-box{min-height:160px;font-size:20px;line-height:2;color:rgba(255,255,255,.9);text-align:center;padding:10px 0;letter-spacing:1px}
-.controls{display:flex;gap:12px;justify-content:center;margin-top:20px;flex-wrap:wrap}
-.btn{padding:10px 24px;border-radius:20px;border:1px solid rgba(255,215,0,.4);background:rgba(255,215,0,.1);color:#ffd700;font-size:15px;cursor:pointer;transition:all .3s;white-space:nowrap}
-.btn:hover{background:rgba(255,215,0,.25);transform:translateY(-1px)}
+.ch-btn:active{transform:scale(.92)}
+.text-box{min-height:140px;font-size:19px;line-height:2;color:rgba(255,255,255,.88);text-align:center;padding:8px 0;letter-spacing:.5px}
+.controls{display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+.btn{padding:10px 22px;border-radius:18px;border:1px solid rgba(255,215,0,.4);background:rgba(255,215,0,.1);color:#ffd700;font-size:15px;cursor:pointer;transition:all .2s;white-space:nowrap;-webkit-appearance:none;appearance:none}
+.btn:active{transform:scale(.95);background:rgba(255,215,0,.25)}
 .btn.primary{background:#ffd700;color:#0a0a2e;font-weight:600;border-color:#ffd700}
-.progress{display:flex;align-items:center;gap:10px;margin-top:16px;font-size:12px;color:rgba(255,255,255,.4)}
+.btn.primary:active{background:#e6c200}
+.progress{display:flex;align-items:center;gap:8px;margin-top:14px;font-size:12px;color:rgba(255,255,255,.4)}
 .prog-bar{flex:1;height:3px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden}
 .prog-fill{height:100%;background:linear-gradient(90deg,#ffd700,#ffb347);width:0;transition:width .3s}
+.loading{color:rgba(255,215,0,.7);font-size:13px;text-align:center;padding:8px 0;display:none}
 </style>
 </head>
 <body>
-<canvas id="bg"></canvas>
 <div class="wrap">
   <div class="title">🌙 宝贝晚安</div>
-  <div class="subtitle">今日睡前故事 · 每天一个新故事</div>
+  <div class="subtitle">今日睡前故事</div>
   <div class="card">
     <div class="story-title" id="storyTitle">月光森林的小精灵</div>
     <div class="chapter-nav" id="chNav"></div>
     <div class="text-box" id="textBox"></div>
+    <div class="loading" id="loading">⏳ 音频加载中...</div>
     <div class="controls">
-      <button class="btn primary" id="playBtn" onclick="togglePlay()">开始朗读</button>
-      <button class="btn" onclick="prevChapter()">上一章</button>
-      <button class="btn" onclick="nextChapter()">下一章</button>
+      <button class="btn primary" id="playBtn">开始朗读</button>
+      <button class="btn" id="prevBtn">上一章</button>
+      <button class="btn" id="nextBtn">下一章</button>
     </div>
     <div class="progress">
       <span id="progText">第 1 / 6 章</span>
@@ -47,169 +49,170 @@ canvas#bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0}
     </div>
   </div>
 </div>
-<audio id="audio" preload="auto"></audio>
+
 <script>
-const story = {
-  title: "月光森林的小精灵",
-  chapters: [
-    "在很远很远的月光森林深处，住着一只只有巴掌大的小精灵，她的名字叫豆豆。豆豆有一对透明亮晶晶的翅膀，每到夜晚就会发出淡淡的银色光芒，像一盏小小的灯笼。她最喜欢做的事，就是坐在最高的那棵橡树上，对着月亮弹她的月亮琴。",
-    "一天晚上，豆豆正在弹琴，忽然听到一阵轻轻的哭声。她循着声音飞过去，发现一只小松鼠蹲在大蘑菇下面发抖。小松鼠的眼泪像珍珠一样滴落在草叶上，"我迷路了，找不到回家的方向……"小松鼠抽泣着说。",
-    ""别怕别怕，我来送你回家。"豆豆温柔地拍了拍小松鼠的脑袋，用闪亮的翅膀轻轻抱了抱它。小松鼠擦了擦眼泪，露出一个小小的笑容，紧紧跟在豆豆身后，一起出发了。",
-    "回家的路上，他们经过了一片萤火虫草地。成千上万的萤火虫同时亮起小灯，像满天星星落在了地上，美得让人屏住了呼吸。小松鼠开心地蹦蹦跳跳，把迷路的害怕全都忘光了。",
-    "终于到了小松鼠的家。松鼠妈妈紧紧抱住了小松鼠，激动得说不出话来。她拿出最甜的松果送给豆豆，"谢谢你，善良的小精灵！"豆豆开心地摆摆手，飞回了她的橡树上，继续弹起了月亮琴。",
-    "夜渐渐深了，月光温柔地洒满了整座森林。豆豆打了个小小的哈欠，收起透明的翅膀，蜷缩在一片柔软的花瓣上。"晚安，月光森林。晚安，小松鼠。"她轻轻地说着，嘴角带着微笑，甜甜地进入了梦乡。"
-  ]
-};
+(function() {
+  'use strict';
 
-let currentCh = 0;
-let isPlaying = false;
-const audio = document.getElementById('audio');
+  var story = {
+    title: "月光森林的小精灵",
+    chapters: [
+      "在很远很远的月光森林深处，住着一只只有巴掌大的小精灵，她的名字叫豆豆。豆豆有一对透明亮晶晶的翅膀，每到夜晚就会发出淡淡的银色光芒，像一盏小小的灯笼。她最喜欢做的事，就是坐在最高的那棵橡树上，对着月亮弹她的月亮琴。",
+      "一天晚上，豆豆正在弹琴，忽然听到一阵轻轻的哭声。她循着声音飞过去，发现一只小松鼠蹲在大蘑菇下面发抖。小松鼠的眼泪像珍珠一样滴落在草叶上，"我迷路了，找不到回家的方向……"小松鼠抽泣着说。",
+      ""别怕别怕，我来送你回家。"豆豆温柔地拍了拍小松鼠的脑袋，用闪亮的翅膀轻轻抱了抱它。小松鼠擦了擦眼泪，露出一个小小的笑容，紧紧跟在豆豆身后，一起出发了。",
+      "回家的路上，他们经过了一片萤火虫草地。成千上万的萤火虫同时亮起小灯，像满天星星落在了地上，美得让人屏住了呼吸。小松鼠开心地蹦蹦跳跳，把迷路的害怕全都忘光了。",
+      "终于到了小松鼠的家。松鼠妈妈紧紧抱住了小松鼠，激动得说不出话来。她拿出最甜的松果送给豆豆，"谢谢你，善良的小精灵！"豆豆开心地摆摆手，飞回了她的橡树上，继续弹起了月亮琴。",
+      "夜渐渐深了，月光温柔地洒满了整座森林。豆豆打了个小小的哈欠，收起透明的翅膀，蜷缩在一片柔软的花瓣上。"晚安，月光森林。晚安，小松鼠。"她轻轻地说着，嘴角带着微笑，甜甜地进入了梦乡。"
+    ]
+  };
 
-function init() {
-  document.getElementById('storyTitle').textContent = story.title;
-  buildNav();
-  loadChapter(0);
-}
+  var currentCh = 0;
+  var isPlaying = false;
+  var audio = new Audio();
 
-function buildNav() {
-  const nav = document.getElementById('chNav');
-  nav.innerHTML = '';
-  story.chapters.forEach((_, i) => {
-    const b = document.createElement('button');
-    b.className = 'ch-btn' + (i === currentCh ? ' active' : '');
-    b.textContent = i + 1;
-    b.onclick = () => { stopAudio(); loadChapter(i); };
-    nav.appendChild(b);
-  });
-}
+  // 微信兼容：不在初始化时设置src，等用户点击时才加载
+  var playBtn = document.getElementById('playBtn');
+  var prevBtn = document.getElementById('prevBtn');
+  var nextBtn = document.getElementById('nextBtn');
+  var textBox = document.getElementById('textBox');
+  var loading = document.getElementById('loading');
 
-function loadChapter(i) {
-  currentCh = i;
-  isPlaying = false;
-  audio.pause();
-  document.getElementById('playBtn').textContent = '开始朗读';
-  document.getElementById('textBox').textContent = story.chapters[i];
-  updateNav();
-  updateProgress();
-  audio.src = 'audio/ch' + (i + 1) + '.mp3';
-  audio.load();
-}
+  function init() {
+    document.getElementById('storyTitle').textContent = story.title;
+    buildNav();
+    loadChapter(0);
+  }
 
-function updateNav() {
-  document.querySelectorAll('.ch-btn').forEach((b, i) => {
-    b.className = 'ch-btn' + (i === currentCh ? ' active' : '');
-  });
-}
+  function buildNav() {
+    var nav = document.getElementById('chNav');
+    nav.innerHTML = '';
+    for (var i = 0; i < story.chapters.length; i++) {
+      (function(idx) {
+        var b = document.createElement('button');
+        b.className = 'ch-btn' + (idx === currentCh ? ' active' : '');
+        b.textContent = idx + 1;
+        b.addEventListener('click', function() {
+          stopAudio();
+          loadChapter(idx);
+        });
+        nav.appendChild(b);
+      })(i);
+    }
+  }
 
-function updateProgress() {
-  document.getElementById('progText').textContent = '第 ' + (currentCh + 1) + ' / ' + story.chapters.length + ' 章';
-  document.getElementById('progFill').style.width = (currentCh / story.chapters.length * 100) + '%';
-}
-
-function togglePlay() {
-  if (!isPlaying) {
-    audio.play().then(() => {
-      isPlaying = true;
-      document.getElementById('playBtn').textContent = '暂停';
-    }).catch(e => {
-      // 微信需要用户交互后才能播放，弹一次就ok
-      console.warn('播放需要用户交互');
-    });
-  } else {
-    audio.pause();
+  function loadChapter(i) {
+    currentCh = i;
     isPlaying = false;
-    document.getElementById('playBtn').textContent = '继续';
-  }
-}
-
-function stopAudio() {
-  audio.pause();
-  audio.currentTime = 0;
-  isPlaying = false;
-}
-
-// 播完自动下一章
-audio.addEventListener('ended', () => {
-  isPlaying = false;
-  if (currentCh < story.chapters.length - 1) {
-    currentCh++;
-    buildNav();
+    audio.pause();
+    audio.currentTime = 0;
+    audio.src = '';
+    playBtn.textContent = '开始朗读';
+    textBox.textContent = story.chapters[i];
+    updateNav();
     updateProgress();
-    loadChapter(currentCh);
-    // 自动播放下一章
-    setTimeout(() => {
-      audio.play().then(() => {
+    loading.style.display = 'none';
+  }
+
+  function updateNav() {
+    var btns = document.querySelectorAll('.ch-btn');
+    for (var i = 0; i < btns.length; i++) {
+      if (i === currentCh) {
+        btns[i].classList.add('active');
+      } else {
+        btns[i].classList.remove('active');
+      }
+    }
+  }
+
+  function updateProgress() {
+    document.getElementById('progText').textContent = '第 ' + (currentCh + 1) + ' / ' + story.chapters.length + ' 章';
+    document.getElementById('progFill').style.width = (currentCh / story.chapters.length * 100) + '%';
+  }
+
+  function doPlay() {
+    // 先设置src（如果还没设置）
+    if (!audio.src || audio.src === '') {
+      audio.src = 'audio/ch' + (currentCh + 1) + '.mp3';
+    }
+    loading.style.display = 'block';
+    var playPromise = audio.play();
+    // 微信兼容：play() 可能返回 undefined
+    if (playPromise && typeof playPromise.then === 'function') {
+      playPromise.then(function() {
         isPlaying = true;
-        document.getElementById('playBtn').textContent = '暂停';
+        playBtn.textContent = '暂停';
+        loading.style.display = 'none';
+      }).catch(function(e) {
+        console.warn('play failed:', e.message || e);
+        loading.style.display = 'none';
       });
-    }, 800);
-  } else {
-    document.getElementById('progFill').style.width = '100%';
-    document.getElementById('playBtn').textContent = '重新播放';
-    currentCh = 0;
-    buildNav();
-    updateProgress();
+    } else {
+      // 老浏览器直接设置
+      isPlaying = true;
+      playBtn.textContent = '暂停';
+      loading.style.display = 'none';
+    }
   }
-});
 
-function prevChapter() { if (currentCh > 0) { stopAudio(); loadChapter(currentCh - 1); } }
-function nextChapter() { if (currentCh < story.chapters.length - 1) { stopAudio(); loadChapter(currentCh + 1); } }
-
-// ===== 星空背景 =====
-const canvas = document.getElementById('bg');
-const ctx = canvas.getContext('2d');
-let stars = [], fireflies = [];
-
-function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-
-function initStars() {
-  stars = [];
-  for (let i = 0; i < 180; i++) {
-    stars.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: Math.random()*1.5+.5, a: Math.random(), da: (Math.random()-.5)*.02 });
-  }
-  fireflies = [];
-  for (let i = 0; i < 6; i++) {
-    fireflies.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, vx: (Math.random()-.5)*.5, vy: (Math.random()-.5)*.5, r: Math.random()*3+2, a: Math.random() });
-  }
-}
-
-function drawBg(t) {
-  ctx.fillStyle = '#0a0a2e';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  const mx = canvas.width*.8, my = canvas.height*.15, mr = 40;
-  const glow = ctx.createRadialGradient(mx, my, mr*.5, mx, my, mr*4);
-  glow.addColorStop(0, 'rgba(255,248,220,0.15)');
-  glow.addColorStop(1, 'transparent');
-  ctx.fillStyle = glow;
-  ctx.fillRect(mx-mr*4, my-mr*4, mr*8, mr*8);
-  ctx.beginPath();
-  ctx.arc(mx, my, mr+Math.sin(t*.002)*2, 0, Math.PI*2);
-  ctx.fillStyle = 'rgba(255,248,220,0.9)';
-  ctx.fill();
-  stars.forEach(s => {
-    s.a += s.da; if (s.a > 1 || s.a < .1) s.da *= -1;
-    ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
-    ctx.fillStyle = 'rgba(255,255,255,' + s.a + ')'; ctx.fill();
+  // 微信兼容：所有音频操作必须绑定在用户点击事件链上
+  playBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+    if (!isPlaying) {
+      // 如果当前章节已播放完，重置
+      if (audio.ended || audio.currentTime >= audio.duration) {
+        audio.currentTime = 0;
+      }
+      doPlay();
+    } else {
+      audio.pause();
+      isPlaying = false;
+      playBtn.textContent = '继续';
+    }
   });
-  fireflies.forEach(f => {
-    f.x += f.vx; f.y += f.vy; f.a += (Math.random()-.5)*.05;
-    if (f.x<0||f.x>canvas.width) f.vx*=-1;
-    if (f.y<0||f.y>canvas.height) f.vy*=-1;
-    f.a = Math.max(.1, Math.min(1, f.a));
-    const g = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, f.r*4);
-    g.addColorStop(0, 'rgba(200,255,100,' + (f.a*.6) + ')');
-    g.addColorStop(1, 'transparent');
-    ctx.fillStyle = g;
-    ctx.fillRect(f.x-f.r*4, f.y-f.r*4, f.r*8, f.r*8);
-    ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, Math.PI*2);
-    ctx.fillStyle = 'rgba(220,255,130,' + f.a + ')'; ctx.fill();
-  });
-  requestAnimationFrame(drawBg);
-}
 
-window.addEventListener('resize', () => { resize(); initStars(); });
-resize(); initStars(); requestAnimationFrame(drawBg);
-init();
+  prevBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+    if (currentCh > 0) { stopAudio(); loadChapter(currentCh - 1); }
+  });
+
+  nextBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+    if (currentCh < story.chapters.length - 1) { stopAudio(); loadChapter(currentCh + 1); }
+  });
+
+  // 微信兼容：ended事件中不能自动play，改为提示用户点击
+  audio.addEventListener('ended', function() {
+    isPlaying = false;
+    if (currentCh < story.chapters.length - 1) {
+      // 切到下一章，但等用户手动点击播放
+      currentCh++;
+      buildNav();
+      updateProgress();
+      loadChapter(currentCh);
+      playBtn.textContent = '▶ 继续下一章';
+    } else {
+      document.getElementById('progFill').style.width = '100%';
+      playBtn.textContent = '重新播放';
+      currentCh = 0;
+      buildNav();
+      updateProgress();
+    }
+  });
+
+  // canplay事件隐藏loading
+  audio.addEventListener('canplay', function() {
+    loading.style.display = 'none';
+  });
+
+  function stopAudio() {
+    audio.pause();
+    audio.currentTime = 0;
+    audio.src = '';
+    isPlaying = false;
+  }
+
+  init();
+})();
 </script>
 </body>
 </html>
