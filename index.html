@@ -13,6 +13,7 @@ body{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;b
 .subtitle{font-size:13px;color:rgba(255,255,255,.45);margin-bottom:18px}
 .card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:24px 20px;max-width:560px;width:100%}
 .story-title{font-size:20px;font-weight:600;color:#ffd700;text-align:center;margin-bottom:4px}
+.chapter-title{font-size:15px;color:rgba(255,215,0,.6);text-align:center;margin-bottom:10px;font-weight:400}
 .chapter-nav{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:12px 0 16px}
 .ch-btn{width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,215,0,.3);background:rgba(255,215,0,.08);color:#ffd700;font-size:13px;cursor:pointer;-webkit-appearance:none;appearance:none}
 .ch-btn.active{background:#ffd700;color:#0a0a2e;font-weight:700;border-color:#ffd700}
@@ -39,6 +40,7 @@ body{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;b
   <div class="subtitle">&#x4ECA;&#x65E5;&#x7761;&#x524D;&#x6545;&#x4E8B;</div>
   <div class="card">
     <div class="story-title" id="storyTitle"></div>
+    <div class="chapter-title" id="chTitle"></div>
     <div class="chapter-nav" id="chNav"></div>
     <div class="text-box" id="textBox"></div>
     <div class="hint" id="hintEl">&#x70B9;&#x51FB;&#x201C;&#x5F00;&#x59CB;&#x6717;&#x8BFB;&#x201D;&#x6536;&#x542C;&#x6545;&#x4E8B; &#x2022; &#x6BCF;&#x65E5;&#x81EA;&#x52A8;&#x66F4;&#x6362;</div>
@@ -98,6 +100,9 @@ body{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;b
   var storyTitleEl = document.getElementById('storyTitle');
   var progTextEl = document.getElementById('progText');
   var progFillEl = document.getElementById('progFill');
+  var chTitleEl = document.getElementById('chTitle');
+
+  var CH_NAMES = ['\u7B2C\u4E00\u7AE0','\u7B2C\u4E8C\u7AE0','\u7B2C\u4E09\u7AE0','\u7B2C\u56DB\u7AE0','\u7B2C\u4E94\u7AE0','\u7B2C\u516D\u7AE0','\u7B2C\u4E03\u7AE0'];
 
   // ========== 工具函数 ==========
   function $(id) { return document.getElementById(id); }
@@ -187,6 +192,7 @@ body{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;b
     var total = story.chapters.length;
     if (progTextEl) progTextEl.textContent = '\u7B2C ' + (currentCh + 1) + ' / ' + total + ' \u7AE0';
     if (progFillEl) progFillEl.style.width = ((currentCh + 1) / total * 100) + '%';
+    if (chTitleEl) chTitleEl.textContent = CH_NAMES[currentCh] || ('\u7B2C ' + (currentCh + 1) + ' \u7AE0');
   }
 
   // ========== 核心播放逻辑 ==========
@@ -274,13 +280,15 @@ body{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;b
       isPlaying = false;
       var story = STORIES[currentStory];
       if (currentCh < story.chapters.length - 1) {
-        // 自动跳转到下一章，显示文本但不自动播放
+        // 自动翻到下一章并自动播放
         currentCh++;
         updateNav();
         updateProgress();
         var text = story.chapters[currentCh];
         startTyping(text);
-        playBtn.textContent = '\u25B6 \u7EE7\u7EED\u4E0B\u4E00\u7AE0';
+        playBtn.textContent = '\u6682\u505C';
+        // 延迟800ms后自动播放下一章，给翻页动画留时间
+        setTimeout(function() { doPlay(); }, 800);
       } else {
         // 全部播完
         if (progFillEl) progFillEl.style.width = '100%';
