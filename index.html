@@ -210,8 +210,8 @@ body{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;b
     var story = STORIES[currentStory];
     var text = story.chapters[currentCh];
 
-    // 显示文本（打字机效果）
-    startTyping(text);
+    // 直接显示完整文本
+    showFullText(text);
     updateNav();
     updateProgress();
 
@@ -285,7 +285,7 @@ body{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;b
         updateNav();
         updateProgress();
         var text = story.chapters[currentCh];
-        startTyping(text);
+        showFullText(text);
         playBtn.textContent = '\u6682\u505C';
         // 延迟800ms后自动播放下一章，给翻页动画留时间
         setTimeout(function() { doPlay(); }, 800);
@@ -316,9 +316,9 @@ body{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;b
       buildNav();
       updateProgress();
 
-      // 显示第一章文本（打字机效果）
+      // 显示第一章完整文本
       var text = story.chapters[0];
-      startTyping(text);
+      showFullText(text);
     } catch(e) {
       document.body.innerHTML = '<p style="color:red;padding:20px;font-size:14px;">\u52A0\u8F7D\u5931\u8D25: ' + e.message + '</p>';
     }
