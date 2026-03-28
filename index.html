@@ -81,12 +81,9 @@
       text-align: center;
     }
 
-    /* 章节按钮 */
+    /* 章节按钮（隐藏，保留逻辑用于高亮跟踪） */
     .chapter-nav {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: center;
+      display: none;
     }
     .ch-btn {
       padding: 7px 14px;
@@ -278,11 +275,12 @@ const chapters = [
 
 let currentChapter = 0;
 let autoPlay = true;
+let pendingPlay = false; // 熄屏期间翻章，需在亮屏后续播
 
 const player = document.getElementById('player');
 const nav = document.getElementById('chapterNav');
 
-// 生成章节按钮
+// 生成章节按钮（隐藏但保留逻辑）
 chapters.forEach((ch, i) => {
   const btn = document.createElement('button');
   btn.className = 'ch-btn' + (i === 0 ? ' active' : '');
@@ -295,7 +293,6 @@ chapters.forEach((ch, i) => {
 function startStory() {
   document.getElementById('overlay').style.display = 'none';
   loadChapter(0);
-  // 用户点击按钮触发，此时可以安全播放（满足浏览器自动播放策略）
   player.play().catch(() => {});
 }
 
@@ -304,19 +301,15 @@ function loadChapter(idx) {
   currentChapter = idx;
   const ch = chapters[idx];
 
-  // 更新文本
   document.getElementById('storyText').textContent = ch.text;
 
-  // 更新音频
   player.src = ch.url;
   player.load();
 
-  // 更新按钮高亮
   document.querySelectorAll('.ch-btn').forEach((b, i) => {
     b.classList.toggle('active', i === idx);
   });
 
-  // 上下章按钮状态
   document.getElementById('prevBtn').disabled = idx === 0;
   document.getElementById('nextBtn').disabled = idx === chapters.length - 1;
 }
@@ -324,7 +317,13 @@ function loadChapter(idx) {
 function changeChapter(idx) {
   if (idx < 0 || idx >= chapters.length) return;
   loadChapter(idx);
-  player.play().catch(() => {});
+  if (document.hidden) {
+    // 页面不可见（熄屏/后台），先标记待播放
+    pendingPlay = true;
+  } else {
+    pendingPlay = false;
+    player.play().catch(() => {});
+  }
 }
 
 function toggleAuto() {
@@ -346,6 +345,22 @@ function updateAutoToggle() {
 player.addEventListener('ended', () => {
   if (autoPlay && currentChapter < chapters.length - 1) {
     changeChapter(currentChapter + 1);
+  }
+});
+
+// 亮屏/切回前台时，如果有待播放任务则立即播
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && pendingPlay) {
+    pendingPlay = false;
+    player.play().catch(() => {});
+  }
+});
+
+// iOS Safari 某些情况下用 pageshow 兜底
+window.addEventListener('pageshow', () => {
+  if (pendingPlay) {
+    pendingPlay = false;
+    player.play().catch(() => {});
   }
 });
 
