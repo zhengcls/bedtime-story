@@ -3,369 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>小兔子跳跳的星星花园</title>
+    <title>小猫妙妙的月亮船</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            min-height: 100vh;
-            color: #fff;
-            overflow-x: hidden;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        .header {
-            text-align: center;
-            padding: 30px 0 20px;
-        }
-        .header h1 {
-            font-size: 24px;
-            font-weight: 600;
-            color: #ffd700;
-            text-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
-            margin-bottom: 8px;
-        }
-        .header .subtitle {
-            font-size: 14px;
-            color: #a0a0a0;
-        }
-        .story-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
-            padding: 20px;
-            margin: 10px 0;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        .chapter-title {
-            font-size: 18px;
-            color: #ffd700;
-            margin-bottom: 12px;
-            text-align: center;
-        }
-        .chapter-text {
-            font-size: 16px;
-            line-height: 1.8;
-            color: #e0e0e0;
-            text-align: justify;
-            flex: 1;
-        }
-        .audio-section {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
-            padding: 16px;
-            margin: 10px 0;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        audio {
-            width: 100%;
-            height: 40px;
-            border-radius: 20px;
-        }
-        .controls {
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-            margin-top: 12px;
-            flex-wrap: wrap;
-        }
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 20px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-        }
-        .btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #ffd700, #ffaa00);
-            color: #1a1a2e;
-            font-weight: 600;
-        }
-        .btn-primary:hover {
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
-        }
-        .chapters-nav {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            justify-content: center;
-            margin: 16px 0;
-        }
-        .chapter-btn {
-            padding: 8px 14px;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            border-radius: 16px;
-            background: rgba(255, 215, 0, 0.1);
-            color: #ffd700;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .chapter-btn:hover {
-            background: rgba(255, 215, 0, 0.2);
-        }
-        .chapter-btn.active {
-            background: linear-gradient(135deg, #ffd700, #ffaa00);
-            color: #1a1a2e;
-            font-weight: 600;
-            border-color: transparent;
-        }
-        .autoplay-toggle {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 12px;
-            font-size: 14px;
-            color: #a0a0a0;
-        }
-        .toggle-switch {
-            width: 44px;
-            height: 24px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            position: relative;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        .toggle-switch.on {
-            background: #ffd700;
-        }
-        .toggle-switch::after {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: #fff;
-            border-radius: 50%;
-            top: 2px;
-            left: 2px;
-            transition: transform 0.3s;
-        }
-        .toggle-switch.on::after {
-            transform: translateX(20px);
-        }
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        .overlay h2 {
-            font-size: 28px;
-            color: #ffd700;
-            margin-bottom: 30px;
-            text-align: center;
-            padding: 0 20px;
-        }
-        .start-btn {
-            padding: 16px 48px;
-            font-size: 18px;
-            background: linear-gradient(135deg, #ffd700, #ffaa00);
-            color: #1a1a2e;
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: 600;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4); }
-            50% { box-shadow: 0 0 0 20px rgba(255, 215, 0, 0); }
-        }
-        .stars {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-        }
-        .star {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: #fff;
-            border-radius: 50%;
-            animation: twinkle 3s infinite;
-        }
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
-        }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC',sans-serif;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);min-height:100vh;color:#fff;overflow-x:hidden}
+        .container{max-width:600px;margin:0 auto;padding:20px;min-height:100vh;display:flex;flex-direction:column}
+        .header{text-align:center;padding:30px 0 20px}
+        .header h1{font-size:24px;font-weight:600;color:#ffd700;text-shadow:0 2px 10px rgba(255,215,0,0.3);margin-bottom:8px}
+        .header .subtitle{font-size:14px;color:#a0a0a0}
+        .story-card{background:rgba(255,255,255,0.05);border-radius:16px;padding:20px;margin:10px 0;border:1px solid rgba(255,255,255,0.1);flex:1;display:flex;flex-direction:column}
+        .chapter-title{font-size:18px;color:#ffd700;margin-bottom:12px;text-align:center}
+        .chapter-text{font-size:16px;line-height:1.8;color:#e0e0e0;text-align:justify;flex:1}
+        .audio-section{background:rgba(255,255,255,0.05);border-radius:16px;padding:16px;margin:10px 0;border:1px solid rgba(255,255,255,0.1)}
+        audio{width:100%;height:40px;border-radius:20px}
+        .controls{display:flex;justify-content:center;gap:16px;margin-top:12px;flex-wrap:wrap}
+        .btn{padding:10px 20px;border:none;border-radius:20px;font-size:14px;cursor:pointer;transition:all 0.3s;background:rgba(255,255,255,0.1);color:#fff}
+        .btn:hover{background:rgba(255,255,255,0.2);transform:translateY(-2px)}
+        .btn-primary{background:linear-gradient(135deg,#ffd700,#ffaa00);color:#1a1a2e;font-weight:600}
+        .chapters-nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:16px 0}
+        .chapter-btn{padding:8px 14px;border:1px solid rgba(255,215,0,0.3);border-radius:16px;background:rgba(255,215,0,0.1);color:#ffd700;font-size:13px;cursor:pointer;transition:all 0.3s}
+        .chapter-btn.active{background:linear-gradient(135deg,#ffd700,#ffaa00);color:#1a1a2e;font-weight:600;border-color:transparent}
+        .autoplay-toggle{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;font-size:14px;color:#a0a0a0}
+        .toggle-switch{width:44px;height:24px;background:rgba(255,255,255,0.2);border-radius:12px;position:relative;cursor:pointer;transition:background 0.3s}
+        .toggle-switch.on{background:#ffd700}
+        .toggle-switch::after{content:'';position:absolute;width:20px;height:20px;background:#fff;border-radius:50%;top:2px;left:2px;transition:transform 0.3s}
+        .toggle-switch.on::after{transform:translateX(20px)}
+        .overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:1000}
+        .overlay h2{font-size:28px;color:#ffd700;margin-bottom:30px;text-align:center;padding:0 20px}
+        .start-btn{padding:16px 48px;font-size:18px;background:linear-gradient(135deg,#ffd700,#ffaa00);color:#1a1a2e;border:none;border-radius:30px;cursor:pointer;font-weight:600;animation:pulse 2s infinite}
+        @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,215,0,0.4)}50%{box-shadow:0 0 0 20px rgba(255,215,0,0)}}
     </style>
 </head>
 <body>
-    <div class="stars" id="stars"></div>
-    
     <div class="overlay" id="overlay">
-        <h2>小兔子跳跳的星星花园</h2>
+        <h2>小猫妙妙的月亮船</h2>
         <button class="start-btn" onclick="startStory()">开始听故事</button>
     </div>
-
     <div class="container">
         <div class="header">
-            <h1>小兔子跳跳的星星花园</h1>
+            <h1>小猫妙妙的月亮船</h1>
             <div class="subtitle">温馨的睡前故事</div>
         </div>
-
         <div class="story-card">
             <div class="chapter-title" id="chapterTitle">第1章</div>
-            <div class="chapter-text" id="chapterText">
-                小兔子跳跳住在一片开满蒲公英的山坡上。每天晚上，她都会趴在洞口，看着天上的星星一颗颗亮起来。"要是能摘一颗星星做灯笼就好了，"跳跳自言自语道。"那样我就能照亮整个山坡，让所有迷路的小动物都能找到回家的路。"
-            </div>
+            <div class="chapter-text" id="chapterText">森林里住着一只可爱的小猫妙妙。她最喜欢在夜晚仰望星空，总是好奇月亮上有什么。这天晚上，一颗流星划过夜空，妙妙许下愿望：她想要一艘月亮船。</div>
         </div>
-
         <div class="audio-section">
-            <audio id="player" controls preload="auto" playsinline webkit-playsinline
-                   x5-playsinline x5-video-player-type="h5" x5-video-player-fullscreen="false"></audio>
-            
+            <audio id="player" controls preload="auto" playsinline webkit-playsinline x5-playsinline x5-video-player-type="h5" x5-video-player-fullscreen="false"></audio>
             <div class="chapters-nav" id="chaptersNav"></div>
-            
             <div class="controls">
                 <button class="btn" onclick="prevChapter()">上一章</button>
                 <button class="btn btn-primary" onclick="nextChapter()">下一章</button>
             </div>
-            
             <div class="autoplay-toggle">
                 <span>自动连播</span>
                 <div class="toggle-switch on" id="autoplayToggle" onclick="toggleAutoplay()"></div>
             </div>
         </div>
     </div>
-
     <script>
-        const chapters = [
-            { title: "第1章", text: "小兔子跳跳住在一片开满蒲公英的山坡上。每天晚上，她都会趴在洞口，看着天上的星星一颗颗亮起来。\"要是能摘一颗星星做灯笼就好了，\"跳跳自言自语道。\"那样我就能照亮整个山坡，让所有迷路的小动物都能找到回家的路。\"", start: 0, end: 19.128 },
-            { title: "第2章", text: "这天夜里，跳跳发现草丛里有一团微弱的光在闪烁。她好奇地跳过去，原来是一只翅膀受伤的小萤火虫，名叫点点。点点说：\"我飞不动了，回不了家了。\"跳跳心疼地把点点捧在手心，决定帮助她。\"别担心，我送你回家。\"", start: 19.128, end: 39.024 },
-            { title: "第3章", text: "跳跳背着点点，穿过茂密的草丛，跳过潺潺的小溪。月光洒在她雪白的绒毛上，像披了一层银纱。点点在跳跳背上轻轻发光，照亮前方的路。两个小伙伴一边走一边聊天，原来点点家住在山坡另一头的芦苇丛里。\"谢谢你愿意帮助我，\"点点感动地说。", start: 39.024, end: 61.56 },
-            { title: "第4章", text: "走到半山腰，他们遇到了正在哭泣的小刺猬球球。球球说：\"我找不到回家的路了，天太黑了。\"跳跳笑着说：\"没关系，点点会发光，我们一起走吧！\"于是，三个小伙伴结伴而行，点点的光芒虽然微弱，却温暖又坚定。", start: 61.56, end: 80.88 },
-            { title: "第5章", text: "终于，他们来到了芦苇丛。点点的家人看到点点平安回来，高兴得闪闪发光，整个芦苇丛都亮了起来，像一片地上的星空。点点妈妈说：\"谢谢你，善良的跳跳。作为感谢，我们萤火虫家族决定每天晚上都来你的山坡，为你点亮一盏盏小灯笼。\"", start: 80.88, end: 103.296 },
-            { title: "第6章", text: "从那以后，每当夜幕降临，成百上千只萤火虫就会飞到跳跳的山坡，在蒲公英丛中翩翩起舞。它们的光芒一闪一闪，像是地上也铺满了星星。跳跳再也不用羡慕天上的星星了，因为她有了自己的星星花园。", start: 103.296, end: 121.896 },
-            { title: "第7章", text: "球球也经常来找跳跳玩，他们一起在星光下追逐萤火虫，分享胡萝卜和浆果。点点康复后，成了跳跳最好的朋友，每天晚上都会停在跳跳的耳朵上，为她照亮回家的路。\"原来，帮助别人，自己也会收获幸福，\"跳跳甜甜地笑了。", start: 121.896, end: 141.6 },
-            { title: "第8章", text: "宝贝今天的故事讲完了，晚安！祝你有一个好梦。", start: 141.6, end: 146.52 }
-        ];
-
-        let currentChapter = 0;
-        let autoPlay = true;
-        const player = document.getElementById('player');
-
-        player.src = "audio/full.mp3";
-        player.load();
-
-        function initStars() {
-            const starsContainer = document.getElementById('stars');
-            for (let i = 0; i < 50; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                star.style.left = Math.random() * 100 + '%';
-                star.style.top = Math.random() * 100 + '%';
-                star.style.animationDelay = Math.random() * 3 + 's';
-                starsContainer.appendChild(star);
-            }
-        }
-
-        function initChaptersNav() {
-            const nav = document.getElementById('chaptersNav');
-            nav.innerHTML = '';
-            chapters.forEach((ch, idx) => {
-                const btn = document.createElement('button');
-                btn.className = 'chapter-btn' + (idx === 0 ? ' active' : '');
-                btn.textContent = ch.title;
-                btn.onclick = () => changeChapter(idx);
-                nav.appendChild(btn);
-            });
-        }
-
-        function updateChapterUI(idx) {
-            currentChapter = idx;
-            document.getElementById('chapterTitle').textContent = chapters[idx].title;
-            document.getElementById('chapterText').textContent = chapters[idx].text;
-            
-            const btns = document.querySelectorAll('.chapter-btn');
-            btns.forEach((btn, i) => {
-                btn.classList.toggle('active', i === idx);
-            });
-        }
-
-        function startStory() {
-            document.getElementById('overlay').style.display = 'none';
-            player.currentTime = chapters[0].start;
-            player.play().catch(() => {});
-        }
-
-        function changeChapter(idx) {
-            if (idx < 0 || idx >= chapters.length) return;
-            currentChapter = idx;
-            updateChapterUI(idx);
-            player.currentTime = chapters[idx].start;
-            player.play().catch(() => {});
-        }
-
-        function prevChapter() {
-            if (currentChapter > 0) {
-                changeChapter(currentChapter - 1);
-            }
-        }
-
-        function nextChapter() {
-            if (currentChapter < chapters.length - 1) {
-                changeChapter(currentChapter + 1);
-            }
-        }
-
-        function toggleAutoplay() {
-            autoPlay = !autoPlay;
-            document.getElementById('autoplayToggle').classList.toggle('on', autoPlay);
-        }
-
-        player.addEventListener('timeupdate', () => {
-            const t = player.currentTime;
-            for (let i = chapters.length - 1; i >= 0; i--) {
-                if (t >= chapters[i].start) {
-                    if (currentChapter !== i) updateChapterUI(i);
-                    break;
-                }
-            }
-            if (!autoPlay) {
-                const ch = chapters[currentChapter];
-                if (t >= ch.end - 0.2 && currentChapter < chapters.length - 1) {
-                    player.pause();
-                }
-            }
-        });
-
-        player.addEventListener('ended', () => {
-            if (autoPlay && currentChapter < chapters.length - 1) {
-                changeChapter(currentChapter + 1);
-            }
-        });
-
-        initStars();
+        const chapters=[{title:"第1章",text:"森林里住着一只可爱的小猫妙妙。她最喜欢在夜晚仰望星空，总是好奇月亮上有什么。这天晚上，一颗流星划过夜空，妙妙许下愿望：她想要一艘月亮船。",start:0.0,end:15.024},{title:"第2章",text:"第二天早晨，妙妙在河边发现了一片闪着银光的贝壳。她高兴极了，决定用这些贝壳建造一艘小船。她邀请小鸟帮忙捡树枝，请小兔子帮忙找藤蔓，大家一起忙碌起来。",start:15.024,end:31.056},{title:"第3章",text:"经过三天的努力，月亮船终于造好了。妙妙在船头系上一根闪亮的星星绳子，这是萤火虫朋友们赠送的礼物。夜幕降临，妙妙轻轻推动小船，驶向了远方。",start:31.056,end:46.08},{title:"第4章",text:"小船漂啊漂，来到了萤火虫山谷。萤火虫们点亮翅膀，为妙妙照亮前行的路。他们唱着歌：妙妙加油向着月亮出发！妙妙开心地挥动手臂表示感谢。",start:46.08,end:60.744},{title:"第5章",text:"继续前行，妙妙遇到了正在巡逻的猫头鹰爷爷。猫头鹰爷爷问她：妙妙，你要去哪里呀？妙妙说：我要去月亮上看看！猫头鹰爷爷微笑着递给她一片羽毛说：这是通往月亮的地图。",start:60.744,end:76.872},{title:"第6章",text:"有了猫头鹰爷爷的羽毛指引，月亮船加速前进。妙妙看到了云朵上的彩虹桥，还看到了住在星星里的小精灵们。他们都向妙妙招手，欢迎她来到星空世界。",start:76.872,end:90.864},{title:"第7章",text:"终于，月亮船抵达了月亮宫。月亮姐姐温柔地迎接妙妙：欢迎你，可爱的小猫！月亮姐姐送给妙妙一枚月光徽章，让她可以在夜晚发出温柔的光芒。",start:90.864,end:104.64},{title:"第8章",text:"妙妙坐着月亮船回到了森林。她把月光徽章挂在胸前，整个森林都被她的光芒照亮。从那以后，妙妙每天都在星光下给小伙伴们讲述她的冒险故事，大家都听得入了迷。",start:104.64,end:120.528}];
+        let currentChapter=0,autoPlay=true;
+        const player=document.getElementById('player');
+        player.src="audio/full.mp3";player.load();
+        function initChaptersNav(){const nav=document.getElementById('chaptersNav');chapters.forEach((ch,idx)=>{const btn=document.createElement('button');btn.className='chapter-btn'+(idx===0?' active':'');btn.textContent=ch.title;btn.onclick=()=>changeChapter(idx);nav.appendChild(btn);});}
+        function updateChapterUI(idx){currentChapter=idx;document.getElementById('chapterTitle').textContent=chapters[idx].title;document.getElementById('chapterText').textContent=chapters[idx].text;document.querySelectorAll('.chapter-btn').forEach((btn,i)=>btn.classList.toggle('active',i===idx));}
+        function startStory(){document.getElementById('overlay').style.display='none';player.currentTime=chapters[0].start;player.play().catch(()=>{});}
+        function changeChapter(idx){if(idx<0||idx>=chapters.length)return;currentChapter=idx;updateChapterUI(idx);player.currentTime=chapters[idx].start;player.play().catch(()=>{});}
+        function prevChapter(){if(currentChapter>0)changeChapter(currentChapter-1);}
+        function nextChapter(){if(currentChapter<chapters.length-1)changeChapter(currentChapter+1);}
+        function toggleAutoplay(){autoPlay=!autoPlay;document.getElementById('autoplayToggle').classList.toggle('on',autoPlay);}
+        player.addEventListener('timeupdate',()=>{const t=player.currentTime;for(let i=chapters.length-1;i>=0;i--){if(t>=chapters[i].start){if(currentChapter!==i)updateChapterUI(i);break;}if(!autoPlay&&currentChapter<chapters.length-1){const ch=chapters[currentChapter];if(t>=ch.end-0.2)player.pause();}}});
+        player.addEventListener('ended',()=>{if(autoPlay&&currentChapter<chapters.length-1)changeChapter(currentChapter+1);});
         initChaptersNav();
     </script>
 </body>
