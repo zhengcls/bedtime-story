@@ -1,377 +1,354 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>小狐狸橙橙的月亮信</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      min-height: 100vh;
-      background: linear-gradient(135deg, #0d1b2a 0%, #1a2f4a 40%, #0f2035 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
-      color: #e8d8b0;
-      padding: 20px;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>小刺猬团团的萤火虫之夜</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* 遮罩层 */
-    #overlay {
-      position: fixed;
-      inset: 0;
-      background: radial-gradient(ellipse at center, #0d1b2a 0%, #050d18 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-      gap: 20px;
-    }
-    .overlay-title {
-      font-size: clamp(22px, 6vw, 36px);
-      font-weight: bold;
-      color: #ffd97d;
-      text-align: center;
-      text-shadow: 0 0 20px rgba(255,217,125,0.6);
-    }
-    .overlay-subtitle {
-      font-size: clamp(13px, 3vw, 17px);
-      color: #b0c4d8;
-      opacity: 0.85;
-    }
-    #startBtn {
-      margin-top: 10px;
-      padding: 14px 36px;
-      font-size: 17px;
-      background: linear-gradient(135deg, #ffd97d, #f4a94e);
-      color: #1a1a2e;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      font-weight: bold;
-      box-shadow: 0 0 24px rgba(255,200,80,0.5);
-      animation: pulse 2s ease-in-out infinite;
-    }
-    @keyframes pulse {
-      0%,100% { transform: scale(1); box-shadow: 0 0 24px rgba(255,200,80,0.5); }
-      50% { transform: scale(1.06); box-shadow: 0 0 38px rgba(255,200,80,0.8); }
-    }
+  body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0d1b2a 0%, #1b2d45 40%, #0f2744 70%, #1a1035 100%);
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    color: #e8d5b0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 16px 40px;
+  }
 
-    /* 主内容 */
-    .container {
-      width: 100%;
-      max-width: 500px;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
-    .story-title {
-      font-size: clamp(20px, 5vw, 28px);
-      font-weight: bold;
-      color: #ffd97d;
-      text-align: center;
-      text-shadow: 0 0 16px rgba(255,217,125,0.5);
-    }
-    .story-desc {
-      font-size: 13px;
-      color: #7fa8c4;
-      text-align: center;
-    }
+  /* 顶部标题 */
+  .title-area {
+    text-align: center;
+    margin-bottom: 24px;
+    margin-top: 10px;
+  }
+  .title-area h1 {
+    font-size: 1.5rem;
+    color: #ffd97d;
+    text-shadow: 0 0 20px rgba(255,210,80,0.5);
+    line-height: 1.4;
+  }
+  .subtitle {
+    font-size: 0.85rem;
+    color: #a0b8cc;
+    margin-top: 6px;
+  }
 
-    /* 章节按钮（隐藏，保留逻辑用于高亮跟踪） */
-    .chapter-nav {
-      display: none;
-    }
-    .ch-btn {
-      padding: 7px 14px;
-      border-radius: 20px;
-      border: 1px solid rgba(255,217,125,0.25);
-      background: rgba(255,255,255,0.04);
-      color: #b0c4d8;
-      font-size: 13px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .ch-btn.active {
-      background: linear-gradient(135deg, #ffd97d, #f4a94e);
-      color: #1a1a2e;
-      border-color: transparent;
-      font-weight: bold;
-      box-shadow: 0 0 12px rgba(255,200,80,0.4);
-    }
-    .ch-btn:hover:not(.active) {
-      background: rgba(255,217,125,0.12);
-      border-color: rgba(255,217,125,0.5);
-    }
+  /* 开始遮罩 */
+  #overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10,18,35,0.92);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    gap: 16px;
+  }
+  #overlay .overlay-title {
+    font-size: 1.4rem;
+    color: #ffd97d;
+    text-align: center;
+    padding: 0 24px;
+  }
+  #overlay .overlay-sub {
+    font-size: 0.9rem;
+    color: #a0b8cc;
+    text-align: center;
+    padding: 0 32px;
+  }
+  #startBtn {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #ffd97d, #ffb830);
+    border: none;
+    cursor: pointer;
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: pulse 2s ease-in-out infinite;
+    box-shadow: 0 0 30px rgba(255,184,48,0.6);
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 30px rgba(255,184,48,0.6); }
+    50% { transform: scale(1.08); box-shadow: 0 0 50px rgba(255,184,48,0.9); }
+  }
 
-    /* 故事文本卡片 */
-    .story-card {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,217,125,0.12);
-      border-radius: 16px;
-      padding: 20px 22px;
-      font-size: clamp(14px, 3.5vw, 16px);
-      line-height: 1.9;
-      color: #d4e8f0;
-      min-height: 90px;
-    }
+  /* 故事文字卡片 */
+  .story-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,220,100,0.15);
+    border-radius: 16px;
+    padding: 20px 18px;
+    width: 100%;
+    max-width: 520px;
+    min-height: 120px;
+    margin-bottom: 20px;
+    line-height: 1.9;
+    font-size: 1.05rem;
+    color: #e8d5b0;
+    transition: all 0.4s ease;
+  }
+  .story-card .ch-label {
+    font-size: 0.8rem;
+    color: #ffd97d;
+    margin-bottom: 8px;
+    opacity: 0.8;
+  }
 
-    /* 音频播放器 */
-    .audio-wrap {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-    }
-    audio {
-      width: 100%;
-      border-radius: 10px;
-    }
+  /* 音频播放器 */
+  .player-wrap {
+    width: 100%;
+    max-width: 520px;
+    margin-bottom: 20px;
+  }
+  audio {
+    width: 100%;
+    border-radius: 10px;
+  }
 
-    /* 底部控制栏 */
-    .controls {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
-    .nav-btn {
-      flex: 1;
-      padding: 10px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,217,125,0.2);
-      border-radius: 12px;
-      color: #e8d8b0;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .nav-btn:hover:not(:disabled) {
-      background: rgba(255,217,125,0.12);
-      border-color: rgba(255,217,125,0.5);
-    }
-    .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-    .auto-toggle {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-      user-select: none;
-      font-size: 13px;
-      color: #7fa8c4;
-      white-space: nowrap;
-    }
-    .toggle-dot {
-      width: 36px;
-      height: 20px;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.15);
-      position: relative;
-      transition: background 0.3s;
-    }
-    .toggle-dot::after {
-      content: '';
-      position: absolute;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background: #fff;
-      top: 3px;
-      left: 3px;
-      transition: left 0.3s;
-    }
-    .toggle-dot.on {
-      background: linear-gradient(135deg, #ffd97d, #f4a94e);
-    }
-    .toggle-dot.on::after { left: 19px; }
+  /* 章节按钮 */
+  .chapters-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    width: 100%;
+    max-width: 520px;
+    margin-bottom: 18px;
+  }
+  .ch-btn {
+    padding: 7px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,220,100,0.3);
+    background: rgba(255,255,255,0.06);
+    color: #c8b890;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .ch-btn.active {
+    background: rgba(255,210,80,0.25);
+    border-color: #ffd97d;
+    color: #ffd97d;
+    box-shadow: 0 0 12px rgba(255,210,80,0.3);
+  }
+  .ch-btn:hover { opacity: 0.8; }
 
-    .footer-note {
-      text-align: center;
-      font-size: 12px;
-      color: #4a6a82;
-      padding-top: 4px;
-    }
-  </style>
+  /* 上一章/下一章 + 自动连播 */
+  .controls-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    max-width: 520px;
+  }
+  .nav-btn {
+    padding: 9px 20px;
+    border-radius: 22px;
+    border: 1px solid rgba(255,220,100,0.35);
+    background: rgba(255,255,255,0.07);
+    color: #e8d5b0;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .nav-btn:hover { background: rgba(255,255,255,0.14); }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+
+  .auto-toggle {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.85rem;
+    color: #a0b8cc;
+    cursor: pointer;
+    user-select: none;
+  }
+  .auto-toggle input { width: 16px; height: 16px; cursor: pointer; accent-color: #ffd97d; }
+
+  /* 底部装饰 */
+  .footer {
+    margin-top: 30px;
+    font-size: 0.75rem;
+    color: rgba(160,184,204,0.5);
+    text-align: center;
+  }
+
+  /* 萤火虫装饰 */
+  .firefly {
+    position: fixed;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #ffd97d;
+    pointer-events: none;
+    animation: fly linear infinite;
+    opacity: 0;
+  }
+  @keyframes fly {
+    0%   { opacity: 0; transform: translate(0,0) scale(1); }
+    20%  { opacity: 0.8; }
+    80%  { opacity: 0.6; }
+    100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0.5); }
+  }
+</style>
 </head>
 <body>
 
-<!-- 开始遮罩层 -->
+<!-- 开始遮罩 -->
 <div id="overlay">
-  <div class="overlay-title">小狐狸橙橙的月亮信</div>
-  <div class="overlay-subtitle">温馨睡前故事 · 香甜入梦</div>
-  <button id="startBtn" onclick="startStory()">点击开始听故事 ✨</button>
+  <div class="overlay-title">小刺猬团团的萤火虫之夜</div>
+  <div class="overlay-sub">轻轻点击，开始今晚的故事</div>
+  <button id="startBtn">▶</button>
 </div>
 
-<!-- 主内容 -->
-<div class="container">
-  <div class="story-title">小狐狸橙橙的月亮信</div>
-  <div class="story-desc">共 7 章 · 每天晚上更新</div>
-
-  <!-- 章节按钮 -->
-  <div class="chapter-nav" id="chapterNav"></div>
-
-  <!-- 故事文本 -->
-  <div class="story-card" id="storyText"></div>
-
-  <!-- 音频 -->
-  <div class="audio-wrap">
-    <audio id="player" controls preload="auto" playsinline webkit-playsinline x5-playsinline x5-video-player-type="h5" x5-video-player-fullscreen="false"></audio>
-  </div>
-
-  <!-- 控制栏 -->
-  <div class="controls">
-    <button class="nav-btn" id="prevBtn" onclick="changeChapter(currentChapter - 1)">← 上一章</button>
-    <label class="auto-toggle" onclick="toggleAuto()">
-      <div class="toggle-dot on" id="autoToggle"></div>
-      <span id="autoLabel">自动连播</span>
-    </label>
-    <button class="nav-btn" id="nextBtn" onclick="changeChapter(currentChapter + 1)">下一章 →</button>
-  </div>
-
-  <div class="footer-note">愿小朗星降临，带你进入甜蜜美梦 🌟</div>
+<!-- 标题 -->
+<div class="title-area">
+  <h1>小刺猬团团的萤火虫之夜</h1>
+  <div class="subtitle">共8章 · 约2分31秒</div>
 </div>
+
+<!-- 故事文字 -->
+<div class="story-card">
+  <div class="ch-label" id="chLabel">第1章</div>
+  <div id="storyText">小刺猬团团住在一片安静的树林里。他的背上长着许多小刺，睡觉的时候总喜欢蜷缩成一个圆球。今晚，团团睡不着，他悄悄从落叶堆里爬出来，抬头看了看深蓝色的夜空，发现天上少了好几颗星星。</div>
+</div>
+
+<!-- 音频播放器 -->
+<div class="player-wrap">
+  <audio id="player" controls preload="auto" playsinline webkit-playsinline
+         x5-playsinline x5-video-player-type="h5" x5-video-player-fullscreen="false">
+  </audio>
+</div>
+
+<!-- 章节按钮 -->
+<div class="chapters-grid" id="chaptersGrid"></div>
+
+<!-- 控制栏 -->
+<div class="controls-row">
+  <button class="nav-btn" id="prevBtn" onclick="prevChapter()" disabled>上一章</button>
+  <label class="auto-toggle">
+    <input type="checkbox" id="autoPlay" checked>
+    自动连播
+  </label>
+  <button class="nav-btn" id="nextBtn" onclick="nextChapter()">下一章</button>
+</div>
+
+<div class="footer">晚安，做个好梦 🌙</div>
 
 <script>
-// =====================================================================
-// 核心方案：单文件连续播放 + timeupdate 跟踪章节
-// 彻底解决微信/X5内核息屏后切换音频源导致无法续播的问题
-// 只有一个 audio src（全部章节合并的完整音频），不在息屏时切换 src
-// =====================================================================
-
 const chapters = [
-  {
-    title: "第1章",
-    text: "橘子林的最深处，住着一只毛色金红的小狐狸，名叫橙橙。她有一个独特的习惯——每天夜晚，当星星爬上树梢，她就会坐在窗边，用树叶做成小纸片，认认真真地给月亮写一封信。信里装着她今天捡到的漂亮松果，装着和蝴蝶捉迷藏的趣事，装着吃到一颗特别甜的野草莓时那种欢喜的感觉。她相信，月亮姐姐一定会看到的。",
-    start: 0,
-    end: 32.18
-  },
-  {
-    title: "第2章",
-    text: "今晚的月亮又大又圆，把橘子林照得亮堂堂的。橙橙折好了信，想了想，觉得光靠风寄信太慢了。于是她跑到小溪边，找来一片宽宽的芭蕉叶，仔仔细细地折成一艘小船，把信轻轻放进去。她用手指轻轻推了一下，小船就咕噜咕噜地漂上了水面，顺着弯弯的溪流，向着月光最亮的地方漂去。橙橙趴在溪边，看得入了迷，嘴角弯成了一个小月牙。",
-    start: 32.18,
-    end: 67.34
-  },
-  {
-    title: "第3章",
-    text: "小船越漂越远，夜莺姐姐从树上探出头来，看见了这艘可爱的叶子船，忍不住为它唱起了歌。叮叮咚咚的歌声在林子里回荡，萤火虫们也跟着飞过来，围着小船转圈圈，像是给它点上了一盏盏小灯笼。小青蛙坐在石头上，呱呱地跟着打节拍。整个橘子林都热闹起来了，好像在举行一场专门为这封信举办的送行晚会，美妙极了。",
-    start: 67.34,
-    end: 99.64
-  },
-  {
-    title: "第4章",
-    text: "月亮姐姐低下头，看见了那艘亮亮的叶子船，弯弯地笑了。她把最柔软的银色月光，像一条轻盈的绸缎，慢慢铺满了整片橘子林。金色的橘子变成了银白色，每一片叶子上都挂着一颗小小的光珠。橙橙仰起头，感觉那束月光轻轻落在她的耳朵尖上，暖暖的，软软的。她深深地吸了一口带着橘花香的夜风，觉得整个世界都在悄悄地告诉她：你被看见了，你被爱着。",
-    start: 99.64,
-    end: 135.09
-  },
-  {
-    title: "第5章",
-    text: "正当橙橙准备回家，草丛里传来一阵窸窸窣窣的声音。好朋友小松鼠栗栗跳了出来，毛茸茸的大尾巴摇得像一把小扇子。她睁着圆圆的眼睛，好奇地问：橙橙，你在做什么呀？橙橙把给月亮写信的事情告诉了她，栗栗一下子就激动了，拍着爪子说：我也要写！我要告诉月亮，我今天找到了今年最大的一颗橡果！于是两个小伙伴趴在溪边，一起认认真真地折起了更多的叶子船。",
-    start: 135.09,
-    end: 172.84
-  },
-  {
-    title: "第6章",
-    text: "一艘、两艘、三艘……小溪上漂满了叶子船，每一艘都装着一个小小的心愿。月亮越升越高，光芒越来越柔和，像妈妈的手轻轻抚过树梢。风也慢下来了，不再调皮地乱跑，而是温温柔柔地绕着橘子林转圈，把睡意一点一点地洒进每一个角落。橙橙听见自己的眼皮变得好沉好沉，打了一个长长的哈欠，栗栗也眯起了眼睛，靠在她的肩膀上，两个小伙伴的呼吸慢慢变得一样深。",
-    start: 172.84,
-    end: 209.73
-  },
-  {
-    title: "第7章",
-    text: "橙橙趴在松软的落叶堆里，枕着秋天温暖的气息。她望着月亮，心里满满当当的，装着今天所有快乐的事情。她轻轻闭上眼睛，嘴角还带着一个小小的微笑。月亮姐姐低下头，用最温柔的银光为她盖上一条光的被子，萤火虫们绕着她慢慢飞，一盏一盏，像是在守护着她的梦。橙橙的梦里，小溪还在流，叶子船还在漂，月亮姐姐正在读她的信，笑得很甜。晚安，小朋友，好梦。",
-    start: 209.73,
-    end: 248.01
-  }
+  { title: "第1章", text: "小刺猬团团住在一片安静的树林里。他的背上长着许多小刺，睡觉的时候总喜欢蜷缩成一个圆球。今晚，团团睡不着，他悄悄从落叶堆里爬出来，抬头看了看深蓝色的夜空，发现天上少了好几颗星星。", start: 0, end: 18.6 },
+  { title: "第2章", text: "团团顺着小路走啊走，忽然看见草丛里有一点一点的光，忽明忽灭，像小小的灯笼。那是什么呀？团团好奇地凑近去看，原来是一群萤火虫正在开派对！萤火虫小姐姐看见团团，笑着说：你来啦，我们正等着多一位朋友呢！", start: 18.6, end: 39.168 },
+  { title: "第3章", text: "萤火虫们围着团团飞啊飞，把柔软的光洒在他身上。团团的小刺也被照得亮晶晶的，像是镶了一圈星星。团团第一次发现，原来自己的刺这么好看。他害羞地低下头，耳朵都红了。", start: 39.168, end: 56.28 },
+  { title: "第4章", text: "萤火虫里有一只叫亮亮的小家伙，个头比别人小一圈，总是飞在最后面。团团问他：你累不累？亮亮说：有点累，但我喜欢发光，只要有人看见，就值得。团团听了，心里暖暖的，悄悄把亮亮接到自己的背上，托着他一起走。", start: 56.28, end: 76.992 },
+  { title: "第5章", text: "他们走到了一棵大树旁，树上有一个圆圆的树洞。树洞里住着睡着了的猫头鹰爷爷。萤火虫们把光聚在一起，轻轻照亮了树洞门口。团团把一朵小花放在门口，留给猫头鹰爷爷明天醒来的惊喜。", start: 76.992, end: 94.776 },
+  { title: "第6章", text: "夜越来越深，露水落在草尖上，亮晶晶的。萤火虫们一个一个打起了哈欠，亮亮也靠在团团背上睡着了。团团踮起脚，轻轻地走，生怕吵醒小伙伴。他心里想：今晚真好，有光，有朋友，还有说不完的快乐。", start: 94.776, end: 114.312 },
+  { title: "第7章", text: "快到家了，团团把亮亮轻轻放进草丛里，盖上一片软软的叶子。亮亮在梦里笑了笑，小小的身子还在发着微光。团团也钻回落叶堆，蜷成圆球，闭上眼睛。他听见风在树梢轻轻唱歌，不一会儿，就甜甜地睡着了。", start: 114.312, end: 134.688 },
+  { title: "第8章", text: "第二天清晨，猫头鹰爷爷看见门口的小花，笑得胡子都翘起来了。他不知道是谁送的，但心里很温暖。而团团还在落叶堆里睡觉，嘴角微微翘着，一定在梦里又和萤火虫们跳舞呢。", start: 134.688, end: 151.344 },
 ];
 
-let currentChapter = 0;
-let autoPlay = true;
-
 const player = document.getElementById('player');
-const nav = document.getElementById('chapterNav');
+let currentChapter = 0;
 
-// 加载唯一的完整音频文件
-player.src = "audio/full.mp3";
+// 设置音频源（只设一次）
+player.src = 'audio/full.mp3';
 player.load();
 
 // 生成章节按钮
+const grid = document.getElementById('chaptersGrid');
 chapters.forEach((ch, i) => {
   const btn = document.createElement('button');
   btn.className = 'ch-btn' + (i === 0 ? ' active' : '');
-  btn.id = 'ch-' + i;
   btn.textContent = ch.title;
   btn.onclick = () => changeChapter(i);
-  nav.appendChild(btn);
+  btn.id = 'chBtn' + i;
+  grid.appendChild(btn);
 });
 
-function updateChapterUI(idx) {
+// 开始按钮
+function startStory() {
+  document.getElementById('overlay').style.display = 'none';
+  player.currentTime = chapters[0].start;
+  player.play().catch(() => {});
+}
+document.getElementById('startBtn').addEventListener('click', startStory);
+
+// 切换章节（只 seek，不换 src）
+function changeChapter(idx) {
   currentChapter = idx;
+  player.currentTime = chapters[idx].start;
+  player.play().catch(() => {});
+  updateUI(idx);
+}
+
+function updateUI(idx) {
+  document.getElementById('chLabel').textContent = chapters[idx].title;
   document.getElementById('storyText').textContent = chapters[idx].text;
   document.querySelectorAll('.ch-btn').forEach((b, i) => {
     b.classList.toggle('active', i === idx);
   });
-  document.getElementById('prevBtn').disabled = idx === 0;
-  document.getElementById('nextBtn').disabled = idx === chapters.length - 1;
+  document.getElementById('prevBtn').disabled = (idx === 0);
+  document.getElementById('nextBtn').disabled = (idx === chapters.length - 1);
 }
 
-function startStory() {
-  document.getElementById('overlay').style.display = 'none';
-  // 跳到第1章起点
-  player.currentTime = chapters[0].start;
-  player.play().catch(() => {});
+function prevChapter() {
+  if (currentChapter > 0) changeChapter(currentChapter - 1);
+}
+function nextChapter() {
+  if (currentChapter < chapters.length - 1) changeChapter(currentChapter + 1);
 }
 
-// timeupdate：用于同步章节文字显示
+// 时间同步
 player.addEventListener('timeupdate', () => {
   const t = player.currentTime;
+  // 找当前章
   for (let i = chapters.length - 1; i >= 0; i--) {
     if (t >= chapters[i].start) {
       if (currentChapter !== i) {
-        updateChapterUI(i);
+        currentChapter = i;
+        updateUI(i);
       }
       break;
     }
   }
-});
-
-// 手动切章：直接 seek 到该章节起点，无需切换 src
-function changeChapter(idx) {
-  if (idx < 0 || idx >= chapters.length) return;
-  player.currentTime = chapters[idx].start;
-  player.play().catch(() => {});
-}
-
-function toggleAuto() {
-  autoPlay = !autoPlay;
-  const dot = document.getElementById('autoToggle');
-  const label = document.getElementById('autoLabel');
-  dot.classList.toggle('on', autoPlay);
-  label.textContent = autoPlay ? "自动连播" : "单章播放";
-}
-
-function updateAutoToggle() {
-  const dot = document.getElementById('autoToggle');
-  const label = document.getElementById('autoLabel');
-  dot.classList.toggle('on', autoPlay);
-  label.textContent = autoPlay ? "自动连播" : "单章播放";
-}
-
-// 单章模式：当前章节结束时暂停
-player.addEventListener('timeupdate', () => {
+  // 非自动连播时，到章末暂停
+  const autoPlay = document.getElementById('autoPlay').checked;
   if (!autoPlay) {
     const ch = chapters[currentChapter];
-    // 留0.2s缓冲避免过早暂停
     if (player.currentTime >= ch.end - 0.2 && currentChapter < chapters.length - 1) {
       player.pause();
     }
   }
 });
 
-// 初始化
-updateChapterUI(0);
-updateAutoToggle();
+// 初始化UI
+updateUI(0);
+
+// 萤火虫装饰
+function createFirefly() {
+  const f = document.createElement('div');
+  f.className = 'firefly';
+  f.style.left = Math.random() * 100 + 'vw';
+  f.style.top = Math.random() * 100 + 'vh';
+  const dur = 4 + Math.random() * 6;
+  f.style.animationDuration = dur + 's';
+  f.style.animationDelay = Math.random() * 5 + 's';
+  f.style.setProperty('--tx', (Math.random() - 0.5) * 200 + 'px');
+  f.style.setProperty('--ty', (Math.random() - 0.5) * 200 + 'px');
+  document.body.appendChild(f);
+  setTimeout(() => f.remove(), (dur + 5) * 1000);
+}
+setInterval(createFirefly, 800);
+for (let i = 0; i < 8; i++) createFirefly();
 </script>
 </body>
 </html>
