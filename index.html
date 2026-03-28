@@ -1,385 +1,372 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>小熊猫圆圆的竹林音乐会</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      min-height: 100vh;
-      background: linear-gradient(135deg, #0d1b2a 0%, #1b2d3e 40%, #2d3e50 100%);
-      font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-      color: #f0e6d3;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px 16px 40px;
-    }
-    /* 开始遮罩 */
-    #overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(10, 20, 35, 0.92);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-      text-align: center;
-      padding: 20px;
-    }
-    #overlay .moon-emoji {
-      font-size: 72px;
-      margin-bottom: 20px;
-      animation: float 3s ease-in-out infinite;
-    }
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-    #overlay h1 {
-      font-size: 22px;
-      color: #f5d98b;
-      margin-bottom: 8px;
-      letter-spacing: 2px;
-    }
-    #overlay p {
-      font-size: 14px;
-      color: #a0b8cc;
-      margin-bottom: 40px;
-    }
-    #startBtn {
-      background: linear-gradient(135deg, #f5a623, #e8851a);
-      color: #1a0a00;
-      border: none;
-      border-radius: 50px;
-      padding: 16px 48px;
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 0 30px rgba(245, 166, 35, 0.5);
-      animation: pulse 2s ease-in-out infinite;
-      letter-spacing: 2px;
-    }
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 20px rgba(245, 166, 35, 0.4); transform: scale(1); }
-      50% { box-shadow: 0 0 40px rgba(245, 166, 35, 0.7); transform: scale(1.04); }
-    }
-    /* 主内容 */
-    .header {
-      text-align: center;
-      margin-bottom: 24px;
-      padding-top: 10px;
-    }
-    .header .icon { font-size: 48px; margin-bottom: 8px; }
-    .header h1 {
-      font-size: 20px;
-      color: #f5d98b;
-      letter-spacing: 1px;
-      line-height: 1.5;
-    }
-    .header .subtitle {
-      font-size: 13px;
-      color: #7a9bb5;
-      margin-top: 4px;
-    }
-    /* 音频播放器 */
-    .player-wrap {
-      width: 100%;
-      max-width: 480px;
-      background: rgba(255,255,255,0.05);
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 20px;
-      border: 1px solid rgba(255,255,255,0.08);
-    }
-    audio {
-      width: 100%;
-      height: 44px;
-      outline: none;
-    }
-    /* 自动播放开关 */
-    .autoplay-bar {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 12px;
-      font-size: 13px;
-      color: #8ab0c8;
-    }
-    .toggle-switch {
-      position: relative;
-      width: 44px;
-      height: 24px;
-      cursor: pointer;
-    }
-    .toggle-switch input { display: none; }
-    .toggle-track {
-      position: absolute;
-      inset: 0;
-      background: #2a4a65;
-      border-radius: 12px;
-      transition: background 0.3s;
-    }
-    .toggle-thumb {
-      position: absolute;
-      top: 3px; left: 3px;
-      width: 18px; height: 18px;
-      background: #fff;
-      border-radius: 50%;
-      transition: transform 0.3s;
-    }
-    .toggle-switch input:checked ~ .toggle-track { background: #f5a623; }
-    .toggle-switch input:checked ~ .toggle-thumb { transform: translateX(20px); }
-    /* 章节导航 */
-    .chapters {
-      width: 100%;
-      max-width: 480px;
-      margin-bottom: 20px;
-    }
-    .chapters-title {
-      font-size: 13px;
-      color: #7a9bb5;
-      margin-bottom: 10px;
-      letter-spacing: 1px;
-    }
-    .chapter-btns {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .chapter-btn {
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.12);
-      color: #c0d8ee;
-      border-radius: 20px;
-      padding: 7px 16px;
-      font-size: 13px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .chapter-btn:hover { background: rgba(245,166,35,0.15); border-color: rgba(245,166,35,0.4); }
-    .chapter-btn.active {
-      background: rgba(245,166,35,0.25);
-      border-color: #f5a623;
-      color: #f5d98b;
-      font-weight: bold;
-    }
-    /* 上一章/下一章 */
-    .nav-btns {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-    .nav-btn {
-      flex: 1;
-      max-width: 160px;
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.12);
-      color: #c0d8ee;
-      border-radius: 24px;
-      padding: 10px 0;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .nav-btn:hover:not(:disabled) { background: rgba(245,166,35,0.2); border-color: #f5a623; }
-    .nav-btn:disabled { opacity: 0.3; cursor: default; }
-    /* 故事文字区 */
-    .story-card {
-      width: 100%;
-      max-width: 480px;
-      background: rgba(255,255,255,0.05);
-      border-radius: 16px;
-      padding: 20px;
-      border: 1px solid rgba(255,255,255,0.08);
-    }
-    .story-chapter-title {
-      font-size: 14px;
-      color: #f5a623;
-      margin-bottom: 12px;
-      font-weight: bold;
-      letter-spacing: 1px;
-    }
-    .story-text {
-      font-size: 15px;
-      line-height: 1.9;
-      color: #ddeeff;
-    }
-    /* 版权 */
-    .footer {
-      margin-top: 32px;
-      font-size: 12px;
-      color: #3a5570;
-      text-align: center;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>小兔子跳跳的星星花园</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            text-align: center;
+            padding: 30px 0 20px;
+        }
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #ffd700;
+            text-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+            margin-bottom: 8px;
+        }
+        .header .subtitle {
+            font-size: 14px;
+            color: #a0a0a0;
+        }
+        .story-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 10px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .chapter-title {
+            font-size: 18px;
+            color: #ffd700;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        .chapter-text {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #e0e0e0;
+            text-align: justify;
+            flex: 1;
+        }
+        .audio-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 16px;
+            margin: 10px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        audio {
+            width: 100%;
+            height: 40px;
+            border-radius: 20px;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            color: #1a1a2e;
+            font-weight: 600;
+        }
+        .btn-primary:hover {
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+        }
+        .chapters-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin: 16px 0;
+        }
+        .chapter-btn {
+            padding: 8px 14px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 16px;
+            background: rgba(255, 215, 0, 0.1);
+            color: #ffd700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .chapter-btn:hover {
+            background: rgba(255, 215, 0, 0.2);
+        }
+        .chapter-btn.active {
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            color: #1a1a2e;
+            font-weight: 600;
+            border-color: transparent;
+        }
+        .autoplay-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
+            font-size: 14px;
+            color: #a0a0a0;
+        }
+        .toggle-switch {
+            width: 44px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .toggle-switch.on {
+            background: #ffd700;
+        }
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #fff;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s;
+        }
+        .toggle-switch.on::after {
+            transform: translateX(20px);
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .overlay h2 {
+            font-size: 28px;
+            color: #ffd700;
+            margin-bottom: 30px;
+            text-align: center;
+            padding: 0 20px;
+        }
+        .start-btn {
+            padding: 16px 48px;
+            font-size: 18px;
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            color: #1a1a2e;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4); }
+            50% { box-shadow: 0 0 0 20px rgba(255, 215, 0, 0); }
+        }
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+    </style>
 </head>
 <body>
+    <div class="stars" id="stars"></div>
+    
+    <div class="overlay" id="overlay">
+        <h2>小兔子跳跳的星星花园</h2>
+        <button class="start-btn" onclick="startStory()">开始听故事</button>
+    </div>
 
-<!-- 开始遮罩 -->
-<div id="overlay">
-  <div class="moon-emoji">🌙</div>
-  <h1>小熊猫圆圆的竹林音乐会</h1>
-  <p>温馨睡前故事 · 共7章 · 约3分42秒</p>
-  <button id="startBtn" onclick="startStory()">开始收听</button>
-</div>
+    <div class="container">
+        <div class="header">
+            <h1>小兔子跳跳的星星花园</h1>
+            <div class="subtitle">温馨的睡前故事</div>
+        </div>
 
-<!-- 主内容 -->
-<div class="header">
-  <div class="icon">🐼</div>
-  <h1>小熊猫圆圆的竹林音乐会</h1>
-  <div class="subtitle">温馨睡前故事 · 共7章</div>
-</div>
+        <div class="story-card">
+            <div class="chapter-title" id="chapterTitle">第1章</div>
+            <div class="chapter-text" id="chapterText">
+                小兔子跳跳住在一片开满蒲公英的山坡上。每天晚上，她都会趴在洞口，看着天上的星星一颗颗亮起来。"要是能摘一颗星星做灯笼就好了，"跳跳自言自语道。"那样我就能照亮整个山坡，让所有迷路的小动物都能找到回家的路。"
+            </div>
+        </div>
 
-<!-- 播放器 -->
-<div class="player-wrap">
-  <audio id="player" controls preload="auto" playsinline webkit-playsinline
-         x5-playsinline x5-video-player-type="h5" x5-video-player-fullscreen="false"></audio>
-  <div class="autoplay-bar">
-    <span>自动连播</span>
-    <label class="toggle-switch">
-      <input type="checkbox" id="autoPlayToggle" checked onchange="toggleAutoPlay(this.checked)">
-      <div class="toggle-track"></div>
-      <div class="toggle-thumb"></div>
-    </label>
-  </div>
-</div>
+        <div class="audio-section">
+            <audio id="player" controls preload="auto" playsinline webkit-playsinline
+                   x5-playsinline x5-video-player-type="h5" x5-video-player-fullscreen="false"></audio>
+            
+            <div class="chapters-nav" id="chaptersNav"></div>
+            
+            <div class="controls">
+                <button class="btn" onclick="prevChapter()">上一章</button>
+                <button class="btn btn-primary" onclick="nextChapter()">下一章</button>
+            </div>
+            
+            <div class="autoplay-toggle">
+                <span>自动连播</span>
+                <div class="toggle-switch on" id="autoplayToggle" onclick="toggleAutoplay()"></div>
+            </div>
+        </div>
+    </div>
 
-<!-- 章节按钮 -->
-<div class="chapters">
-  <div class="chapters-title">章节导航</div>
-  <div class="chapter-btns" id="chapterBtns"></div>
-</div>
+    <script>
+        const chapters = [
+            { title: "第1章", text: "小兔子跳跳住在一片开满蒲公英的山坡上。每天晚上，她都会趴在洞口，看着天上的星星一颗颗亮起来。\"要是能摘一颗星星做灯笼就好了，\"跳跳自言自语道。\"那样我就能照亮整个山坡，让所有迷路的小动物都能找到回家的路。\"", start: 0, end: 19.128 },
+            { title: "第2章", text: "这天夜里，跳跳发现草丛里有一团微弱的光在闪烁。她好奇地跳过去，原来是一只翅膀受伤的小萤火虫，名叫点点。点点说：\"我飞不动了，回不了家了。\"跳跳心疼地把点点捧在手心，决定帮助她。\"别担心，我送你回家。\"", start: 19.128, end: 39.024 },
+            { title: "第3章", text: "跳跳背着点点，穿过茂密的草丛，跳过潺潺的小溪。月光洒在她雪白的绒毛上，像披了一层银纱。点点在跳跳背上轻轻发光，照亮前方的路。两个小伙伴一边走一边聊天，原来点点家住在山坡另一头的芦苇丛里。\"谢谢你愿意帮助我，\"点点感动地说。", start: 39.024, end: 61.56 },
+            { title: "第4章", text: "走到半山腰，他们遇到了正在哭泣的小刺猬球球。球球说：\"我找不到回家的路了，天太黑了。\"跳跳笑着说：\"没关系，点点会发光，我们一起走吧！\"于是，三个小伙伴结伴而行，点点的光芒虽然微弱，却温暖又坚定。", start: 61.56, end: 80.88 },
+            { title: "第5章", text: "终于，他们来到了芦苇丛。点点的家人看到点点平安回来，高兴得闪闪发光，整个芦苇丛都亮了起来，像一片地上的星空。点点妈妈说：\"谢谢你，善良的跳跳。作为感谢，我们萤火虫家族决定每天晚上都来你的山坡，为你点亮一盏盏小灯笼。\"", start: 80.88, end: 103.296 },
+            { title: "第6章", text: "从那以后，每当夜幕降临，成百上千只萤火虫就会飞到跳跳的山坡，在蒲公英丛中翩翩起舞。它们的光芒一闪一闪，像是地上也铺满了星星。跳跳再也不用羡慕天上的星星了，因为她有了自己的星星花园。", start: 103.296, end: 121.896 },
+            { title: "第7章", text: "球球也经常来找跳跳玩，他们一起在星光下追逐萤火虫，分享胡萝卜和浆果。点点康复后，成了跳跳最好的朋友，每天晚上都会停在跳跳的耳朵上，为她照亮回家的路。\"原来，帮助别人，自己也会收获幸福，\"跳跳甜甜地笑了。", start: 121.896, end: 141.6 },
+            { title: "第8章", text: "宝贝今天的故事讲完了，晚安！祝你有一个好梦。", start: 141.6, end: 146.52 }
+        ];
 
-<!-- 上下章按钮 -->
-<div class="nav-btns">
-  <button class="nav-btn" id="prevBtn" onclick="prevChapter()">上一章</button>
-  <button class="nav-btn" id="nextBtn" onclick="nextChapter()">下一章</button>
-</div>
+        let currentChapter = 0;
+        let autoPlay = true;
+        const player = document.getElementById('player');
 
-<!-- 故事文字 -->
-<div class="story-card">
-  <div class="story-chapter-title" id="chapterTitle"></div>
-  <div class="story-text" id="storyText"></div>
-</div>
+        player.src = "audio/full.mp3";
+        player.load();
 
-<div class="footer">每晚好梦 · 龙虾机器人出品</div>
+        function initStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 50; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
 
-<script>
-const chapters = [
-  {
-    title: "第1章 · 神奇的声音",
-    text: "竹林深处住着一只胖乎乎的小熊猫，名叫圆圆。他有一双圆滚滚的黑眼睛，耳朵上有两个小绒球，走路的时候总是摇摇晃晃，可爱极了。圆圆最喜欢做的事，就是爬上最高的竹子，看云朵在天上飘来飘去。今天，他听到了一阵奇妙的声音，是竹叶被风吹动的沙沙声，像音乐一样好听。圆圆竖起耳朵，心想：要是能把这声音留下来就好了。",
-    start: 0, end: 31.008
-  },
-  {
-    title: "第2章 · 邀请朋友们",
-    text: "圆圆决定在竹林里举办一场音乐会。他跑去找好朋友小兔子跳跳，说：跳跳，你愿意来唱歌吗？跳跳拍着小爪子说：当然愿意！我会唱月亮歌！圆圆又找到了小松鼠栗栗，栗栗说她会用两根树枝敲出好听的节拍。然后圆圆遇到了住在大石头下面的青蛙咕咕，咕咕说：我的呱呱声是最好的低音！大家都答应来参加，圆圆高兴得翻了个跟头。",
-    start: 31.008, end: 62.568
-  },
-  {
-    title: "第3章 · 布置舞台",
-    text: "第二天早晨，圆圆早早起来，用竹叶铺了一个圆圆的舞台，又摘了许多小野花插在旁边。他用细树枝做了小指挥棒，戴上竹叶折的小帽子，对着水塘照了照，觉得自己帅极了。小鸟们飞来飞去，好奇地问发生了什么，圆圆神秘地说：今晚，竹林里会有一场最美的音乐会，你们都来听吧！小鸟们叽叽喳喳地飞走传递消息，整个竹林都沸腾起来了。",
-    start: 62.568, end: 92.496
-  },
-  {
-    title: "第4章 · 音乐会开始",
-    text: "傍晚，夕阳把竹林染成了金黄色。小动物们陆陆续续来到竹叶舞台前，有小鹿、小松鼠、小刺猬，还有几只五彩斑斓的蝴蝶。大家找到自己的位置坐下，眼睛都亮晶晶地望着圆圆。圆圆深呼一口气，举起小指挥棒，微微一挥。跳跳开始唱歌，声音甜甜的，像蜂蜜流过草尖；栗栗敲打树枝，节奏轻快又欢快；咕咕低声伴唱，像远处的鼓声一样沉稳。竹叶的沙沙声也恰好在微风中响起，把所有声音都包裹在一起。",
-    start: 92.496, end: 130.752
-  },
-  {
-    title: "第5章 · 忽然下雨了",
-    text: "音乐会正进行到最美的时候，突然，一片乌云飘了过来，轰隆隆地打了一声雷，大家都吓了一跳。雨水嗒嗒地落下来，把竹叶舞台打湿了。小动物们纷纷躲到大竹子下面，圆圆急得团团转。就在这时，老獾爷爷慢悠悠地走来，搬来一片宽宽的大竹叶，撑成了一把天然大伞。大家挤在一起，雨声叮叮当当，反而成了新的伴奏，比刚才还要好听。",
-    start: 130.752, end: 160.776
-  },
-  {
-    title: "第6章 · 月光下的歌声",
-    text: "雨渐渐停了，竹叶上的水珠像小珍珠一样滚动着。天边升起了一弯弦月，把银白色的光洒进竹林，整个舞台都亮了起来。圆圆站在月光里，感觉心里暖暖的，软软的，像是被什么轻轻抱住了一样。他抬起小指挥棒，大家会意地又唱起来，歌声随着竹叶的摇曳飘向远方。林子里所有的小动物都安静地听着，连平时最吵闹的小蝉也不说话了。",
-    start: 160.776, end: 191.184
-  },
-  {
-    title: "第7章 · 甜甜的梦乡",
-    text: "音乐会结束了，大家依依不舍地道晚安。圆圆躺在柔软的竹叶堆里，仰望满天星星。他想：今天真是最美好的一天。风轻轻地吹来，竹叶又发出了那熟悉的沙沙声，就像在给圆圆唱一首专属的摇篮曲。圆圆的眼皮越来越重，嘴角弯成了一个小小的弧度。月光盖在他身上，星星守在他旁边，他在竹林音乐会的余韵里，甜甜地进入了梦乡。",
-    start: 191.184, end: 222.024
-  }
-];
+        function initChaptersNav() {
+            const nav = document.getElementById('chaptersNav');
+            nav.innerHTML = '';
+            chapters.forEach((ch, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'chapter-btn' + (idx === 0 ? ' active' : '');
+                btn.textContent = ch.title;
+                btn.onclick = () => changeChapter(idx);
+                nav.appendChild(btn);
+            });
+        }
 
-let currentChapter = 0;
-let autoPlay = true;
-const player = document.getElementById('player');
+        function updateChapterUI(idx) {
+            currentChapter = idx;
+            document.getElementById('chapterTitle').textContent = chapters[idx].title;
+            document.getElementById('chapterText').textContent = chapters[idx].text;
+            
+            const btns = document.querySelectorAll('.chapter-btn');
+            btns.forEach((btn, i) => {
+                btn.classList.toggle('active', i === idx);
+            });
+        }
 
-// 初始化
-player.src = "audio/full.mp3";
-player.load();
+        function startStory() {
+            document.getElementById('overlay').style.display = 'none';
+            player.currentTime = chapters[0].start;
+            player.play().catch(() => {});
+        }
 
-function startStory() {
-  document.getElementById('overlay').style.display = 'none';
-  player.currentTime = chapters[0].start;
-  player.play().catch(() => {});
-}
+        function changeChapter(idx) {
+            if (idx < 0 || idx >= chapters.length) return;
+            currentChapter = idx;
+            updateChapterUI(idx);
+            player.currentTime = chapters[idx].start;
+            player.play().catch(() => {});
+        }
 
-function updateChapterUI(idx) {
-  currentChapter = idx;
-  document.getElementById('chapterTitle').textContent = chapters[idx].title;
-  document.getElementById('storyText').textContent = chapters[idx].text;
-  document.querySelectorAll('.chapter-btn').forEach((btn, i) => {
-    btn.classList.toggle('active', i === idx);
-  });
-  document.getElementById('prevBtn').disabled = idx === 0;
-  document.getElementById('nextBtn').disabled = idx === chapters.length - 1;
-}
+        function prevChapter() {
+            if (currentChapter > 0) {
+                changeChapter(currentChapter - 1);
+            }
+        }
 
-function changeChapter(idx) {
-  updateChapterUI(idx);
-  player.currentTime = chapters[idx].start;
-  player.play().catch(() => {});
-}
+        function nextChapter() {
+            if (currentChapter < chapters.length - 1) {
+                changeChapter(currentChapter + 1);
+            }
+        }
 
-function prevChapter() {
-  if (currentChapter > 0) changeChapter(currentChapter - 1);
-}
+        function toggleAutoplay() {
+            autoPlay = !autoPlay;
+            document.getElementById('autoplayToggle').classList.toggle('on', autoPlay);
+        }
 
-function nextChapter() {
-  if (currentChapter < chapters.length - 1) changeChapter(currentChapter + 1);
-}
+        player.addEventListener('timeupdate', () => {
+            const t = player.currentTime;
+            for (let i = chapters.length - 1; i >= 0; i--) {
+                if (t >= chapters[i].start) {
+                    if (currentChapter !== i) updateChapterUI(i);
+                    break;
+                }
+            }
+            if (!autoPlay) {
+                const ch = chapters[currentChapter];
+                if (t >= ch.end - 0.2 && currentChapter < chapters.length - 1) {
+                    player.pause();
+                }
+            }
+        });
 
-function toggleAutoPlay(val) {
-  autoPlay = val;
-}
+        player.addEventListener('ended', () => {
+            if (autoPlay && currentChapter < chapters.length - 1) {
+                changeChapter(currentChapter + 1);
+            }
+        });
 
-player.addEventListener('timeupdate', () => {
-  const t = player.currentTime;
-  // 自动同步章节UI
-  for (let i = chapters.length - 1; i >= 0; i--) {
-    if (t >= chapters[i].start) {
-      if (currentChapter !== i) updateChapterUI(i);
-      break;
-    }
-  }
-  // 单章模式：自动暂停
-  if (!autoPlay) {
-    const ch = chapters[currentChapter];
-    if (t >= ch.end - 0.2 && currentChapter < chapters.length - 1) {
-      player.pause();
-    }
-  }
-});
-
-// 初始化章节按钮
-const btnContainer = document.getElementById('chapterBtns');
-chapters.forEach((ch, i) => {
-  const btn = document.createElement('button');
-  btn.className = 'chapter-btn';
-  btn.textContent = `第${i+1}章`;
-  btn.onclick = () => changeChapter(i);
-  btnContainer.appendChild(btn);
-});
-
-// 初始化UI
-updateChapterUI(0);
-</script>
+        initStars();
+        initChaptersNav();
+    </script>
 </body>
 </html>

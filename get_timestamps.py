@@ -1,6 +1,6 @@
 import subprocess, json
 
-N = 7
+N = 8
 
 timestamps = []
 t = 0
