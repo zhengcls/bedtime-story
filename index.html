@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>\u5c0f\u4e4c\u9f9f\u6162\u6162\u7684\u661f\u661f\u82b1\u56ed</title>
+  <title>小乌龟慢慢的星星花园</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -270,16 +270,16 @@
 <!-- 开始遮罩层 -->
 <div id="startOverlay">
   <div class="overlay-moon">🌙</div>
-  <div class="overlay-title">\u5c0f\u4e4c\u9f9f\u6162\u6162\u7684\u661f\u661f\u82b1\u56ed</div>
-  <div class="overlay-subtitle">\u6e29\u99a8\u7761\u524d\u6545\u4e8b · \u9999\u751c\u5165\u68a6</div>
-  <button id="startBtn" onclick="startStory()">\u70b9\u51fb\u5f00\u59cb\u542c\u6545\u4e8b ✨</button>
+  <div class="overlay-title">小乌龟慢慢的星星花园</div>
+  <div class="overlay-subtitle">温馨睡前故事 · 香甜入梦</div>
+  <button id="startBtn" onclick="startStory()">点击开始听故事 ✨</button>
 </div>
 
 <div class="main-content">
   <div class="story-header">
     <span class="story-emoji">🐢</span>
-    <div class="story-title">\u5c0f\u4e4c\u9f9f\u6162\u6162\u7684\u661f\u661f\u82b1\u56ed</div>
-    <div class="story-desc">\u5171 7 \u7ae0 · \u6bcf\u5929\u665a\u4e0a\u9648\u65b0</div>
+    <div class="story-title">小乌龟慢慢的星星花园</div>
+    <div class="story-desc">共 7 章 · 每天晚上更新</div>
   </div>
 
   <div class="chapter-nav" id="chapterNav"></div>
@@ -294,52 +294,52 @@
   </div>
 
   <div class="controls">
-    <button class="nav-btn" id="prevBtn" onclick="changeChapter(currentChapter - 1)">\u2190 \u4e0a\u4e00\u7ae0</button>
+    <button class="nav-btn" id="prevBtn" onclick="changeChapter(currentChapter - 1)">← 上一章</button>
     <label class="auto-toggle" onclick="toggleAuto()">
       <div class="toggle-dot" id="autoToggle"></div>
-      <span id="autoLabel">\u81ea\u52a8\u8fde\u64ad</span>
+      <span id="autoLabel">自动连播</span>
     </label>
-    <button class="nav-btn" id="nextBtn" onclick="changeChapter(currentChapter + 1)">\u4e0b\u4e00\u7ae0 \u2192</button>
+    <button class="nav-btn" id="nextBtn" onclick="changeChapter(currentChapter + 1)">下一章 →</button>
   </div>
 
-  <div class="footer-note">\u613f\u5c0f\u6717\u661f\u964d\u4e34\uff0c\u5e26\u4f60\u8fdb\u5165\u751c\u871c\u6881\u68a6 🌟</div>
+  <div class="footer-note">愿小朗星降临，带你进入甜蜜美梦 🌟</div>
 </div>
 
 <script>
 const chapters = [
   {
-    title: "\u7b2c1\u7ae0",
-    text: "\u5c0f\u4e4c\u9f9f\u6162\u6162\u4f4f\u5728\u68ee\u6797\u8fb9\u7684\u5c0f\u6cb3\u65c1\uff0c\u5979\u6709\u4e00\u4e2a\u7f8e\u4e3d\u7684\u68a6\u60f3\u2014\u2014\u79cd\u4e00\u7247\u4f1a\u53d1\u5149\u7684\u661f\u661f\u82b1\u3002\u6bcf\u5929\u50cd\u664a\uff0c\u5979\u90fd\u4f1a\u671b\u7740\u5929\u4e0a\u7684\u661f\u661f\uff0c\u8f7b\u8f7b\u5730\u8bf4\uff1a\u300c\u603b\u6709\u4e00\u5929\uff0c\u6211\u4e5f\u8981\u6709\u81ea\u5df1\u7684\u661f\u661f\u82b1\u56ed\u3002\u300d",
+    title: "第1章",
+    text: "小乌龟慢慢住在森林边的小河旁，她有一个美丽的梦想——种一片会发光的星星花。每天傍晚，她都会望着天上的星星，轻轻地说：「总有一天，我也要有自己的星星花园。」",
     url: "audio/ch1.mp3"
   },
   {
-    title: "\u7b2c2\u7ae0",
-    text: "\u6625\u5929\u6765\u4e86\uff0c\u6162\u6162\u5728\u6cb3\u8fb9\u627e\u5230\u4e86\u4e00\u9897\u95ea\u95ea\u53d1\u4eae\u7684\u82b1\u79cd\u5b50\u3002\u5979\u5c0f\u5fc3\u7ffc\u7ffc\u5730\u637f\u7740\u79cd\u5b50\uff0c\u8d70\u5230\u82b1\u56ed\u91cc\uff0c\u8f7b\u8f7b\u5730\u628a\u5b83\u57cb\u8fdb\u4e86\u67d4\u8f6f\u7684\u6ce5\u571f\u91cc\uff0c\u8fd8\u76d6\u4e0a\u4e86\u4e00\u5c42\u8584\u8584\u7684\u843d\u53f6\u88ab\u5b50\u3002",
+    title: "第2章",
+    text: "春天来了，慢慢在河边找到了一颗闪闪发亮的花种子。她小心翼翼地捧着种子，走到花园里，轻轻地把它埋进了柔软的泥土里，还盖上了一层薄薄的落叶被子。",
     url: "audio/ch2.mp3"
   },
   {
-    title: "\u7b2c3\u7ae0",
-    text: "\u5c0f\u8681\u8549\u542c\u8bf4\u4e86\u8fd9\u4ef6\u4e8b\uff0c\u60c4\u60c4\u5730\u9497\u8fdb\u6ce5\u571f\u91cc\u5e2e\u6162\u6162\u677e\u571f\u3002\u5c0f\u871c\u8702\u4e5f\u98de\u6765\u98de\u53bb\uff0c\u7528\u9732\u73e0\u5e2e\u6162\u6162\u6d47\u6c34\u3002\u5927\u5bb6\u90fd\u559c\u6b22\u6162\u6162\uff0c\u613f\u610f\u4e00\u8d77\u7167\u987e\u90a3\u9897\u73cd\u8d35\u7684\u5c0f\u79cd\u5b50\u3002",
+    title: "第3章",
+    text: "小蚯蚓听说了这件事，悄悄地钻进泥土里帮慢慢松土。小蜜蜂也飞来飞去，用露珠帮慢慢浇水。大家都喜欢慢慢，愿意一起照顾那颗珍贵的小种子。",
     url: "audio/ch3.mp3"
   },
   {
-    title: "\u7b2c4\u7ae0",
-    text: "\u6162\u6162\u6bcf\u5929\u90fd\u6765\u770b\u671b\u79cd\u5b50\uff0c\u7528\u6e29\u67d4\u7684\u58f0\u97f3\u5531\u6b4c\u7ed9\u5b83\u542c\uff0c\u8bb2\u7f8e\u4e3d\u7684\u6545\u4e8b\u7ed9\u5b83\u542c\u3002\u4e00\u5929\u53c8\u4e00\u5929\uff0c\u6ce5\u571f\u91cc\u7ec8\u4e8e\u9876\u51fa\u4e86\u4e00\u70b9\u70b9\u5a29\u7eff\uff0c\u5c0f\u5c0f\u7684\u79cd\u5b50\u53d1\u82bd\u4e86\uff01\u6162\u6162\u9ad8\u5174\u5730\u8df3\u8d77\u821e\u6765\u3002",
+    title: "第4章",
+    text: "慢慢每天都来看望种子，用温柔的声音唱歌给它听，讲美丽的故事给它听。一天又一天，泥土里终于顶出了一点点嫩绿，小小的种子发芽了！慢慢高兴地跳起舞来。",
     url: "audio/ch4.mp3"
   },
   {
-    title: "\u7b2c5\u7ae0",
-    text: "\u82bd\u513f\u6162\u6162\u957f\u9ad8\uff0c\u957f\u51fa\u4e86\u7fe0\u7eff\u7684\u53f6\u5b50\uff0c\u6700\u540e\u5f00\u51fa\u4e86\u4e00\u6735\u6735\u5c0f\u5c0f\u7684\u767d\u8272\u82b1\u6735\u3002\u5230\u4e86\u591c\u6652\uff0c\u90a3\u4e9b\u82b1\u74e3\u4f1a\u8f7b\u8f7b\u5730\u53d1\u51fa\u67d4\u548c\u7684\u5149\u8292\uff0c\u5c31\u50cf\u843d\u5728\u5730\u4e0a\u7684\u5c0f\u661f\u661f\uff0c\u7f8e\u6781\u4e86\u3002",
+    title: "第5章",
+    text: "芽儿慢慢长高，长出了翠绿的叶子，最后开出了一簇簇小小的白色花朵。到了夜晚，那些花瓣会轻轻地发出柔和的光芒，就像落在地上的小星星，美极了。",
     url: "audio/ch5.mp3"
   },
   {
-    title: "\u7b2c6\u7ae0",
-    text: "\u5c0f\u52a8\u7269\u4eec\u90fd\u6765\u6b23\u8d4f\u661f\u661f\u82b1\u3002\u5c0f\u5154\u5b50\u3001\u5c0f\u72d0\u72f8\u3001\u5c0f\u677e\u9f20\uff0c\u5927\u5bb6\u56f4\u5750\u5728\u82b1\u56ed\u91cc\uff0c\u9759\u9759\u5730\u770b\u7740\u90a3\u4e9b\u95ea\u5149\u7684\u82b1\u6735\u3002\u6708\u4eae\u4e5f\u63a2\u51fa\u4e86\u5706\u5706\u7684\u8138\uff0c\u5fae\u7b11\u7740\u770b\u8fd9\u7f8e\u4e3d\u6e29\u6696\u7684\u82b1\u56ed\u3002",
+    title: "第6章",
+    text: "小动物们都来欣赏星星花。小兔子、小狐狸、小松鼠，大家围坐在花园里，静静地看着那些闪光的花朵。月亮也探出了圆圆的脸，微笑着看这美丽温暖的花园。",
     url: "audio/ch6.mp3"
   },
   {
-    title: "\u7b2c7\u7ae0",
-    text: "\u6162\u6162\u8eba\u5728\u661f\u661f\u82b1\u65c1\u8fb9\uff0c\u671b\u7740\u5934\u9876\u7684\u6ee1\u5929\u661f\u661f\uff0c\u5fc3\u91cc\u5145\u6ee1\u4e86\u5e78\u798f\u3002\u5979\u95ed\u4e0a\u773c\u775b\uff0c\u5fae\u5fae\u5730\u7b11\u7740\uff0c\u751c\u751c\u5730\u7761\u7740\u4e86\u3002\u53ea\u8981\u6709\u68a6\u60f3\uff0c\u5c31\u4f1a\u6709\u7f8e\u4e3d\u7684\u82b1\u5f00\u653e\u3002\u6652\u5b89\uff0c\u597d\u68a6\uff0c\u5c0f\u6717\u53cb\u3002",
+    title: "第7章",
+    text: "慢慢躺在星星花旁边，望着头顶的满天星星，心里充满了幸福。她闭上眼睛，微微地笑着，甜甜地睡着了。只要有梦想，就会有美丽的花开放。晚安，好梦，小朋友。",
     url: "audio/ch7.mp3"
   }
 ];
@@ -397,7 +397,7 @@ function updateAutoToggle() {
   const dot = document.getElementById("autoToggle");
   const label = document.getElementById("autoLabel");
   dot.className = "toggle-dot" + (autoPlay ? " on" : "");
-  label.textContent = autoPlay ? "\u81ea\u52a8\u8fde\u64ad" : "\u5355\u7ae0\u64ad\u653e";
+  label.textContent = autoPlay ? "自动连播" : "单章播放";
 }
 
 player.addEventListener("ended", () => {
