@@ -10,7 +10,7 @@ card = {
         "header": {
             "title": {
                 "tag": "plain_text",
-                "content": "\U0001f422 \u5c0f\u4e4c\u9f9f\u6162\u6162\u7684\u661f\u661f\u82b1\u56ed"
+                "content": "🦊 小狐狸橙橙的月亮信"
             },
             "template": "indigo"
         },
@@ -19,7 +19,7 @@ card = {
                 "tag": "div",
                 "text": {
                     "tag": "lark_md",
-                    "content": "\u5b9d\u8d1d\uff0c\u665a\u4e0a\u597d\uff01\u4eca\u5929\u7684\u7761\u524d\u6545\u4e8b\u6765\u554a \u2728\n\n\u5c0f\u4e4c\u9f9f\u6162\u6162\u6709\u4e00\u4e2a\u68a6\u60f3\uff0c\u8981\u79cd\u4e00\u7247\u4f1a\u53d1\u5149\u7684\u661f\u661f\u82b1\u3002\u5728\u5c0f\u8681\u8549\u548c\u5c0f\u871c\u8702\u7684\u5e2e\u52a9\u4e0b\uff0c\u5979\u7684\u68a6\u60f3\u5b9e\u73b0\u4e86\u2014\u2014\u82b1\u56ed\u91cc\u5f00\u6ee1\u4e86\u4f1a\u53d1\u5149\u7684\u661f\u661f\u82b1\u3002\u6b3e\u8fce\u548c\u5b9d\u8d1d\u4e00\u8d77\u6765\u542c\u8fd9\u4e2a\u6e29\u99a8\u7684\u6545\u4e8b\uff01\n\n\U0001f4da **\u5171 7 \u7ae0** | \U0001f3a7 \u91cd\u5c0f\u52a8\u7269\u4e3b\u89d2 | \u2728 \u9999\u751c\u5165\u68a6"
+                    "content": "宝贝，晚上好！今天的睡前故事来啦 ✨\n\n小狐狸橙橙每天晚上都要给月亮写一封信，用树叶折成小船放进小溪，让小溪把信带给月亮姐姐。月亮听到后，弯弯地笑了，把银色的光铺满了整片橘子林……欢迎和宝贝一起来听这个温馨的故事！\n\n📚 **共 7 章** | 🎧 可爱小动物主角 | ✨ 香甜入梦"
                 }
             },
             {
@@ -29,7 +29,7 @@ card = {
                         "tag": "button",
                         "text": {
                             "tag": "plain_text",
-                            "content": "\U0001f319 \u5f00\u59cb\u542c\u6545\u4e8b"
+                            "content": "🌙 开始听故事"
                         },
                         "type": "primary",
                         "url": "https://zhengcls.github.io/bedtime-story/"
