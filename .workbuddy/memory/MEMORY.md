@@ -24,10 +24,13 @@
 
 **⚠️ 禁止在命令行直接拼接中文文本，必须写 Python 脚本文件**
 
+**⚠️ 必须先删除旧文件再生成（防呆A）：edge_tts 在目标文件已存在时可能静默失败**
+
 脚本模板（写入 `gen_audio_today.py`，覆盖旧文件）：
 ```python
 import asyncio
 import edge_tts
+import os
 
 chapters = [
     { "id": 1, "text": "第一章内容..." },
@@ -37,9 +40,13 @@ chapters = [
 
 async def gen():
     for ch in chapters:
+        # 【防呆A】：先删除旧文件，edge_tts 不会静默覆盖
+        path = f'audio/ch{ch["id"]}.mp3'
+        if os.path.exists(path):
+            os.remove(path)
         communicate = edge_tts.Communicate(ch["text"], "zh-CN-XiaoyiNeural")
-        await communicate.save(f"audio/ch{ch['id']}.mp3")
-        print(f"ch{ch['id']} done")
+        await communicate.save(path)
+        print(f'ch{ch["id"]} done')
 
 asyncio.run(gen())
 ```
@@ -54,6 +61,7 @@ C:\Users\Administrator\AppData\Local\Programs\Python\Python310\python.exe gen_au
 - 输出：`audio/ch1.mp3` ~ `audio/chN.mp3`（N=实际章节数）
 - **Python 脚本中禁用中文引号 `"` `"`，只用英文引号 `"` `'`**
 - **print() 中不能含 emoji**，Windows gbk 编码会报 UnicodeEncodeError
+- **每次生成前必须删除旧文件**，否则 edge_tts 可能静默写入失败
 
 ---
 
@@ -61,12 +69,23 @@ C:\Users\Administrator\AppData\Local\Programs\Python\Python310\python.exe gen_au
 
 **⚠️ 核心步骤：解决微信息屏翻章不播放的根本方案**
 
+**⚠️ 必须从 audio/ 目录内执行 ffmpeg，否则 concat_list.txt 路径会出错（防呆B）**
+
+推荐：使用 `fix_all.py` 一键完成第2~5步（包含所有防呆检查）。或手动执行：
+
 写入 `get_timestamps.py`（N 动态适配章节数）：
 ```python
-import subprocess, json
+import subprocess, json, os
 
 # 必须和 gen_audio_today.py 中 chapters 保持相同章节数
 N = 8  # 按实际章节数修改（7或8）
+
+# 【防呆B】：先验证 ch*.mp3 比 full.mp3 更新
+full_mtime = os.path.getmtime('audio/full.mp3')
+for i in range(1, N + 1):
+    ch_mtime = os.path.getmtime(f'audio/ch{i}.mp3')
+    if ch_mtime <= full_mtime:
+        raise Exception(f'ch{i}.mp3 比 full.mp3 更旧，TTS未更新，请重新生成！')
 
 timestamps = []
 t = 0
@@ -77,18 +96,32 @@ for i in range(1, N + 1):
     )
     duration = float(json.loads(r.stdout)['streams'][0]['duration'])
     timestamps.append((round(t, 3), round(t + duration, 3)))
+    print(f'ch{i}: start={round(t,3)} dur={duration:.3f}s')
     t += duration
 
-print("timestamps =", timestamps)
-print(f"total duration: {round(t, 1)}s")
+print(f'Total: {round(t,1)}s')
+
+# 【防呆C】：验证 full.mp3 时长
+with open('audio/concat_list.txt', 'w') as f:
+    for i in range(1, N + 1):
+        f.write(f"file 'ch{i}.mp3'\n")  # 注意：相对于audio/目录，不加前缀
 ```
 
-执行获取时间戳后，再合并（8章版本）：
+然后**在 audio/ 目录内**执行合并：
 ```bash
-ffmpeg -y -i "concat:audio/ch1.mp3|audio/ch2.mp3|audio/ch3.mp3|audio/ch4.mp3|audio/ch5.mp3|audio/ch6.mp3|audio/ch7.mp3|audio/ch8.mp3" -acodec copy audio/full.mp3
+cd audio && ffmpeg -y -f concat -safe 0 -i concat_list.txt -acodec copy full.mp3
 ```
 
-7章版本去掉 `|audio/ch8.mp3` 即可。
+合并后验证（防呆C）：
+```python
+import subprocess, json
+r = subprocess.run(['ffprobe','-v','quiet','-print_format','json','-show_streams','audio/full.mp3'], capture_output=True, text=True)
+dur = float(json.loads(r.stdout)['streams'][0]['duration'])
+expected = sum(ch_durations)
+if abs(dur - expected) > 1:
+    raise Exception(f'full.mp3时长{dur}s与预期{expected}s差距过大，合并可能失败！')
+print('合并验证通过')
+```
 
 ---
 
@@ -176,14 +209,19 @@ Start-Process -NoNewWindow -FilePath "python" -ArgumentList "-m http.server 8899
 
 ### 第6步：部署到 GitHub Pages
 
+**⚠️ 必须使用新音频文件名绕过浏览器缓存（防呆D）：**
+
 ```bash
+# 使用 cache_bust.py 递增版本号并更新HTML引用
 cd "f:\龙虾机器人\日常定时推送\bedtime-story"
+C:\Users\Administrator\AppData\Local\Programs\Python\Python310\python.exe cache_bust.py
 git add -A
 git commit -m "feat: 新增睡前故事《故事名》"
 git push origin main
 ```
 
 - 线上地址：https://zhengcls.github.io/bedtime-story/
+- **必须执行 cache_bust.py**，否则用户会因浏览器缓存听到旧音频
 - 中文路径偶尔 push 失败，失败时重试一次
 
 ---
@@ -242,9 +280,10 @@ C:\Users\Administrator\AppData\Local\Programs\Python\Python310\python.exe send_f
 | 飞书 Webhook | https://open.feishu.cn/open-apis/bot/v2/hook/f7b32472-16fb-40c1-8860-fec21f13db66 |
 | TTS 语音 | zh-CN-XiaoyiNeural |
 | Python 路径 | C:\Users\Administrator\AppData\Local\Programs\Python\Python310\python.exe |
-| 音频文件 | audio/ch1.mp3~chN.mp3（分章）+ audio/full.mp3（合并） |
+| 音频文件 | audio/ch1.mp3~chN.mp3（分章）+ audio/full_v*.mp3（合并，**每次推送用新文件名**） |
 | **定时任务时间** | **每天 21:30** |
 | 定时任务工作目录 | f:\龙虾机器人\日常定时推送\bedtime-story |
+| **推荐脚本** | **fix_all.py**（一键完成第2~5步，自动包含所有防呆检查） |
 
 ## 用户偏好
 
@@ -267,7 +306,79 @@ C:\Users\Administrator\AppData\Local\Programs\Python\Python310\python.exe send_f
 
 ---
 
-## 踩坑汇总
+## 关键Bug修复（必须记）
+
+### Bug3: edge_tts 静默覆盖失败导致TTS不更新
+**根因**：当目标文件已存在时，edge_tts 可能在写入时静默失败（文件被占用或权限问题），但不会报错，导致读到旧音频
+**解决**：**TTS生成前必须先删除旧的 ch1-ch8.mp3**，再用 edge_tts 写入。绝不能依赖"覆盖"行为
+
+### Bug4: ffmpeg concat路径错误（双层audio/audio/）
+**根因**：concat_list.txt写的是相对于项目根目录的路径（`audio/ch1.mp3`），但ffmpeg从audio/目录内执行，找不到`audio/ch1.mp3`
+**解决**：concat_list.txt必须写相对于执行目录的路径；从audio/目录内执行时写`ch1.mp3`；或使用cwd参数
+
+### Bug5: 浏览器音频缓存导致用户听到旧音频
+**根因**：即使GitHub更新了full.mp3，浏览器会缓存旧的full.mp3，用户每次打开都加载缓存版本
+**解决**：每次推送使用**新文件名**（如full_v3.mp3），HTML引用新文件名，彻底绕过浏览器缓存
+
+---
+
+## 强制防呆流程（必须严格遵守）
+
+> 每次定时任务执行时，必须按此顺序执行，否则极大概率产生 Bug3+4+5的连环故障
+
+### 防呆A：TTS生成前强制删除旧文件
+```python
+# gen_audio.py / gen_audio_today.py 必须包含此逻辑
+import os
+for i in range(1, 9):
+    path = f'audio/ch{i}.mp3'
+    if os.path.exists(path):
+        os.remove(path)  # 强制删除，否则edge_tts可能静默失败
+```
+
+### 防呆B：合并时检查ch*.mp3的mtime，必须比full.mp3更新
+```python
+# 合并前验证
+import os, subprocess, json
+for i in range(1, 9):
+    ch_mtime = os.path.getmtime(f'audio/ch{i}.mp3')
+    full_mtime = os.path.getmtime('audio/full.mp3')
+    assert ch_mtime > full_mtime, f'ch{i}.mp3 比 full.mp3 更旧，请重新生成TTS！'
+```
+
+### 防呆C：合并后验证full.mp3时长是否符合预期
+```python
+# 验证总时长
+r = subprocess.run(['ffprobe','-v','quiet','-print_format','json','-show_streams','audio/full.mp3'], capture_output=True, text=True)
+dur = float(json.loads(r.stdout)['streams'][0]['duration'])
+expected = sum_ch_durations()  # ch1~chN时长之和
+assert abs(dur - expected) < 1, f'full.mp3时长{dur}s与预期{expected}s差距过大，可能合并失败'
+```
+
+### 防呆D：部署时使用新音频文件名
+```python
+# cache_bust.py - 每次部署递增版本号
+import os, glob, re
+existing = glob.glob('audio/full_v*.mp3')
+nums = [int(re.search(r'full_v(\d+)', f).group(1)) for f in existing]
+next_ver = max(nums) + 1 if nums else 2
+new_name = f'audio/full_v{next_ver}.mp3'
+old_name = 'audio/full.mp3'
+# 复制old到new，然后HTML中引用new_name
+```
+**关键**：concat_list.txt里的源文件也要跟着变！`file 'audio/ch{i}.mp3'` 写法保持不变（ch*.mp3不在缓存范围内）
+
+### 防呆E：部署后最终验证（必做）
+```python
+# deploy之后执行MD5校验
+import hashlib
+for fname in ['audio/ch1.mp3', 'audio/full.mp3']:
+    with open(fname, 'rb') as f:
+        print(fname, hashlib.md5(f.read()).hexdigest())
+# 记录到执行日志，如果MD5和上次一样说明TTS/合并出了问题
+```
+
+
 
 | # | 问题 | 根因 | 解法 |
 |---|------|------|------|
@@ -294,4 +405,4 @@ C:\Users\Administrator\AppData\Local\Programs\Python\Python310\python.exe send_f
 | 2026-03-28 | 小熊猫圆圆的竹林音乐会 | 已完成（7章，总时长222s）|
 | 2026-03-28 | 小兔子跳跳的星星花园 | 已完成（8章，总时长146.5s）|
 | 2026-03-28 | 小猫妙妙的月亮船 | 已完成（8章，总时长120.5s，流水线版首次执行15.5s）|
-| 2026-03-28 | 小鹿斑斑的梦境花园 | 已完成（8章，总时长124.5s，流水线12.3s）|
+| 2026-03-28 | 小鹿斑斑的梦境花园 | 已完成（8章，总时长124.5s，流水线12.3s；音频缓存问题修复：使用full_v2.mp3新文件名强制刷新）|
