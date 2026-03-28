@@ -295,6 +295,8 @@ chapters.forEach((ch, i) => {
 function startStory() {
   document.getElementById('overlay').style.display = 'none';
   loadChapter(0);
+  // 用户点击按钮触发，此时可以安全播放（满足浏览器自动播放策略）
+  player.play().catch(() => {});
 }
 
 function loadChapter(idx) {
