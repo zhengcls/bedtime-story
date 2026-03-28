@@ -65,7 +65,7 @@ git push origin main
 ### 必须遵守（避免卡顿）
 1. **TTS生成**：用 Python edge-tts 库，写脚本文件执行，禁止命令行拼接中文
 2. **飞书推送**：用 send_feishu.py 脚本，禁止用 PowerShell curl
-3. **HTML编码**：中文用 Unicode 转义（如 `\u7B2C` = 第）
+3. **HTML编码**：HTML 标签内容直接写中文；JS 字符串中可选择 Unicode 或直接中文均可，但统一用直接中文更安全
 4. **Git操作**：中文路径偶尔出问题，失败时重试一次
 
 ### HTML播放器功能清单
@@ -84,8 +84,9 @@ git push origin main
 | 2026-03-27 | 小萤火虫亮亮的星光梦 | 已完成 |
 | 2026-03-27 | 小松鼠果果的彩虹桥 | 已完成 |
 | 2026-03-27 | 小海龟豆豆的寻星之旅 | 已完成 |
+| 2026-03-28 | 小乌龟慢慢的星星花园 | 已完成 |
 
 ## 踩坑经验
 - **PowerShell curl 陷阱**：PowerShell 的 curl 是 Invoke-WebRequest 的别名，处理 JSON 中的 URL/特殊字符会反复失败，浪费 5-10 分钟
 - **TTS 中文引号问题**：命令行传递含引号的中文会解析失败，必须用脚本文件
-- **Unicode 编码必要**：HTML 中直接写中文在某些环境会乱码，用 Unicode 转义最稳妥
+- **⚠️ Unicode 编码仅限 JS！HTML 标签内容禁用**：`\u5c0f` 等 Unicode 转义**只在 JavaScript 字符串中有效**，放在 HTML 标签内容（如 `<title>`、`<div>` 文本节点）中会直接显示原始转义字符串，导致乱码。HTML 部分必须直接写中文，JS 字符串中可以用 Unicode 转义也可以直接写中文。

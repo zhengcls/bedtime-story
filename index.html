@@ -1,50 +1,28 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>小乌龟慢慢的星星花园</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>小狐狸橙橙的月亮信</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       min-height: 100vh;
-      background: linear-gradient(135deg, #0d1b3e 0%, #1a2a5e 40%, #0d2e4a 70%, #0a1a2e 100%);
-      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-      color: #e8e0ff;
+      background: linear-gradient(135deg, #0d1b2a 0%, #1a2f4a 40%, #0f2035 100%);
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 20px 16px 40px;
-      position: relative;
-      overflow-x: hidden;
+      justify-content: center;
+      font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: #e8d8b0;
+      padding: 20px;
     }
 
-    /* 星星背景 */
-    body::before {
-      content: "";
+    /* 遮罩层 */
+    #overlay {
       position: fixed;
       inset: 0;
-      background-image:
-        radial-gradient(circle 1px at 15% 20%, rgba(255,255,200,0.8) 1px, transparent 1px),
-        radial-gradient(circle 1px at 35% 10%, rgba(255,255,200,0.6) 1px, transparent 1px),
-        radial-gradient(circle 1px at 60% 15%, rgba(255,255,200,0.9) 1px, transparent 1px),
-        radial-gradient(circle 1px at 80% 8%, rgba(255,255,200,0.7) 1px, transparent 1px),
-        radial-gradient(circle 1px at 90% 30%, rgba(255,255,200,0.5) 1px, transparent 1px),
-        radial-gradient(circle 1px at 10% 45%, rgba(255,255,200,0.6) 1px, transparent 1px),
-        radial-gradient(circle 1.5px at 50% 5%, rgba(255,255,200,1) 1px, transparent 1px),
-        radial-gradient(circle 1px at 70% 40%, rgba(255,255,200,0.4) 1px, transparent 1px),
-        radial-gradient(circle 1px at 25% 55%, rgba(200,220,255,0.6) 1px, transparent 1px),
-        radial-gradient(circle 1px at 85% 55%, rgba(200,220,255,0.5) 1px, transparent 1px);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* 开始遮罩层 */
-    #startOverlay {
-      position: fixed;
-      inset: 0;
-      background: linear-gradient(135deg, #0a1628 0%, #1a2a5e 50%, #0a1628 100%);
+      background: radial-gradient(ellipse at center, #0d1b2a 0%, #050d18 100%);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -52,251 +30,205 @@
       z-index: 100;
       gap: 20px;
     }
-
-    .overlay-moon {
-      font-size: 72px;
-      animation: moonGlow 2s ease-in-out infinite alternate;
-    }
-
-    @keyframes moonGlow {
-      from { filter: drop-shadow(0 0 10px #ffe066); transform: scale(1); }
-      to   { filter: drop-shadow(0 0 30px #ffe066); transform: scale(1.08); }
-    }
-
     .overlay-title {
-      font-size: 22px;
-      color: #d4bbff;
-      letter-spacing: 2px;
+      font-size: clamp(22px, 6vw, 36px);
+      font-weight: bold;
+      color: #ffd97d;
       text-align: center;
+      text-shadow: 0 0 20px rgba(255,217,125,0.6);
     }
-
     .overlay-subtitle {
-      font-size: 14px;
-      color: #8899cc;
-      margin-top: -10px;
+      font-size: clamp(13px, 3vw, 17px);
+      color: #b0c4d8;
+      opacity: 0.85;
     }
-
     #startBtn {
       margin-top: 10px;
-      padding: 14px 48px;
-      font-size: 18px;
-      background: linear-gradient(135deg, #6a4cff, #9b59ff);
-      color: #fff;
+      padding: 14px 36px;
+      font-size: 17px;
+      background: linear-gradient(135deg, #ffd97d, #f4a94e);
+      color: #1a1a2e;
       border: none;
       border-radius: 50px;
       cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 0 24px rgba(255,200,80,0.5);
       animation: pulse 2s ease-in-out infinite;
-      box-shadow: 0 0 20px rgba(106, 76, 255, 0.6);
     }
-
     @keyframes pulse {
-      0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(106,76,255,0.6); }
-      50%       { transform: scale(1.06); box-shadow: 0 0 35px rgba(106,76,255,0.9); }
+      0%,100% { transform: scale(1); box-shadow: 0 0 24px rgba(255,200,80,0.5); }
+      50% { transform: scale(1.06); box-shadow: 0 0 38px rgba(255,200,80,0.8); }
     }
 
     /* 主内容 */
-    .main-content { position: relative; z-index: 1; width: 100%; max-width: 500px; }
-
-    .story-header {
-      text-align: center;
-      padding: 20px 0 16px;
+    .container {
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
     }
-
-    .story-emoji { font-size: 56px; display: block; margin-bottom: 10px; }
-
     .story-title {
-      font-size: 22px;
+      font-size: clamp(20px, 5vw, 28px);
       font-weight: bold;
-      color: #d4bbff;
-      letter-spacing: 1px;
-      text-shadow: 0 0 15px rgba(180,140,255,0.5);
+      color: #ffd97d;
+      text-align: center;
+      text-shadow: 0 0 16px rgba(255,217,125,0.5);
     }
-
     .story-desc {
       font-size: 13px;
-      color: #7788bb;
-      margin-top: 6px;
+      color: #7fa8c4;
+      text-align: center;
     }
 
-    /* 章节按钮组 */
+    /* 章节按钮 */
     .chapter-nav {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
       justify-content: center;
-      margin: 16px 0;
     }
-
     .ch-btn {
       padding: 7px 14px;
-      font-size: 13px;
-      background: rgba(255,255,255,0.06);
-      color: #a0aacc;
-      border: 1px solid rgba(255,255,255,0.12);
       border-radius: 20px;
+      border: 1px solid rgba(255,217,125,0.25);
+      background: rgba(255,255,255,0.04);
+      color: #b0c4d8;
+      font-size: 13px;
       cursor: pointer;
       transition: all 0.2s;
     }
-
-    .ch-btn:hover { background: rgba(255,255,255,0.12); color: #d4bbff; }
-
     .ch-btn.active {
-      background: linear-gradient(135deg, #6a4cff, #9b59ff);
-      color: #fff;
+      background: linear-gradient(135deg, #ffd97d, #f4a94e);
+      color: #1a1a2e;
       border-color: transparent;
-      box-shadow: 0 0 12px rgba(106,76,255,0.5);
+      font-weight: bold;
+      box-shadow: 0 0 12px rgba(255,200,80,0.4);
+    }
+    .ch-btn:hover:not(.active) {
+      background: rgba(255,217,125,0.12);
+      border-color: rgba(255,217,125,0.5);
     }
 
-    /* 故事卡片 */
+    /* 故事文本卡片 */
     .story-card {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 20px;
-      padding: 20px;
-      margin: 10px 0;
-      backdrop-filter: blur(10px);
-    }
-
-    .chapter-label {
-      font-size: 12px;
-      color: #7788bb;
-      margin-bottom: 8px;
-      letter-spacing: 1px;
-    }
-
-    .chapter-text {
-      font-size: 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,217,125,0.12);
+      border-radius: 16px;
+      padding: 20px 22px;
+      font-size: clamp(14px, 3.5vw, 16px);
       line-height: 1.9;
-      color: #ccd6ff;
-      letter-spacing: 0.5px;
+      color: #d4e8f0;
+      min-height: 90px;
     }
 
     /* 音频播放器 */
-    .audio-wrapper {
-      margin: 14px 0;
-      background: rgba(255,255,255,0.05);
-      border-radius: 16px;
-      padding: 14px;
-      border: 1px solid rgba(255,255,255,0.08);
+    .audio-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
     }
-
     audio {
       width: 100%;
-      height: 40px;
       border-radius: 10px;
-      outline: none;
     }
 
-    audio::-webkit-media-controls-panel {
-      background: rgba(20, 30, 70, 0.8);
-    }
-
-    /* 控制栏 */
+    /* 底部控制栏 */
     .controls {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin: 12px 0;
       gap: 10px;
     }
-
     .nav-btn {
       flex: 1;
       padding: 10px;
-      font-size: 14px;
-      background: rgba(255,255,255,0.07);
-      color: #a0aacc;
-      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,217,125,0.2);
       border-radius: 12px;
+      color: #e8d8b0;
+      font-size: 14px;
       cursor: pointer;
       transition: all 0.2s;
     }
-
     .nav-btn:hover:not(:disabled) {
-      background: rgba(255,255,255,0.14);
-      color: #d4bbff;
+      background: rgba(255,217,125,0.12);
+      border-color: rgba(255,217,125,0.5);
     }
-
     .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-
     .auto-toggle {
       display: flex;
       align-items: center;
-      gap: 6px;
-      font-size: 13px;
-      color: #8899cc;
+      gap: 8px;
       cursor: pointer;
       user-select: none;
+      font-size: 13px;
+      color: #7fa8c4;
+      white-space: nowrap;
     }
-
     .toggle-dot {
-      width: 32px;
-      height: 18px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 9px;
+      width: 36px;
+      height: 20px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.15);
       position: relative;
       transition: background 0.3s;
     }
-
     .toggle-dot::after {
-      content: "";
+      content: '';
       position: absolute;
       width: 14px;
       height: 14px;
-      background: #fff;
       border-radius: 50%;
-      top: 2px;
-      left: 2px;
-      transition: transform 0.3s;
+      background: #fff;
+      top: 3px;
+      left: 3px;
+      transition: left 0.3s;
     }
-
     .toggle-dot.on {
-      background: linear-gradient(135deg, #6a4cff, #9b59ff);
+      background: linear-gradient(135deg, #ffd97d, #f4a94e);
     }
-
-    .toggle-dot.on::after { transform: translateX(14px); }
+    .toggle-dot.on::after { left: 19px; }
 
     .footer-note {
       text-align: center;
       font-size: 12px;
-      color: #44557a;
-      margin-top: 24px;
-      padding-bottom: 10px;
+      color: #4a6a82;
+      padding-top: 4px;
     }
   </style>
 </head>
 <body>
 
 <!-- 开始遮罩层 -->
-<div id="startOverlay">
-  <div class="overlay-moon">🌙</div>
-  <div class="overlay-title">小乌龟慢慢的星星花园</div>
+<div id="overlay">
+  <div class="overlay-title">小狐狸橙橙的月亮信</div>
   <div class="overlay-subtitle">温馨睡前故事 · 香甜入梦</div>
   <button id="startBtn" onclick="startStory()">点击开始听故事 ✨</button>
 </div>
 
-<div class="main-content">
-  <div class="story-header">
-    <span class="story-emoji">🐢</span>
-    <div class="story-title">小乌龟慢慢的星星花园</div>
-    <div class="story-desc">共 7 章 · 每天晚上更新</div>
-  </div>
+<!-- 主内容 -->
+<div class="container">
+  <div class="story-title">小狐狸橙橙的月亮信</div>
+  <div class="story-desc">共 7 章 · 每天晚上更新</div>
 
+  <!-- 章节按钮 -->
   <div class="chapter-nav" id="chapterNav"></div>
 
-  <div class="story-card">
-    <div class="chapter-label" id="chapterLabel"></div>
-    <div class="chapter-text" id="chapterText"></div>
-  </div>
+  <!-- 故事文本 -->
+  <div class="story-card" id="storyText"></div>
 
-  <div class="audio-wrapper">
+  <!-- 音频 -->
+  <div class="audio-wrap">
     <audio id="player" controls preload="none" playsinline webkit-playsinline></audio>
   </div>
 
+  <!-- 控制栏 -->
   <div class="controls">
     <button class="nav-btn" id="prevBtn" onclick="changeChapter(currentChapter - 1)">← 上一章</button>
     <label class="auto-toggle" onclick="toggleAuto()">
-      <div class="toggle-dot" id="autoToggle"></div>
+      <div class="toggle-dot on" id="autoToggle"></div>
       <span id="autoLabel">自动连播</span>
     </label>
     <button class="nav-btn" id="nextBtn" onclick="changeChapter(currentChapter + 1)">下一章 →</button>
@@ -309,110 +241,115 @@
 const chapters = [
   {
     title: "第1章",
-    text: "小乌龟慢慢住在森林边的小河旁，她有一个美丽的梦想——种一片会发光的星星花。每天傍晚，她都会望着天上的星星，轻轻地说：「总有一天，我也要有自己的星星花园。」",
+    text: "小狐狸橙橙住在橘子林里，每天晚上都要给月亮写一封信，把今天开心的事情说给月亮听。",
     url: "audio/ch1.mp3"
   },
   {
     title: "第2章",
-    text: "春天来了，慢慢在河边找到了一颗闪闪发亮的花种子。她小心翼翼地捧着种子，走到花园里，轻轻地把它埋进了柔软的泥土里，还盖上了一层薄薄的落叶被子。",
+    text: "今晚，橙橙用树叶折了一艘小船，把信放进去，轻轻地放到了小溪里，说：月亮姐姐，帮我把信带上去吧。",
     url: "audio/ch2.mp3"
   },
   {
     title: "第3章",
-    text: "小蚯蚓听说了这件事，悄悄地钻进泥土里帮慢慢松土。小蜜蜂也飞来飞去，用露珠帮慢慢浇水。大家都喜欢慢慢，愿意一起照顾那颗珍贵的小种子。",
+    text: "小溪咕噜咕噜地答应了，载着信慢慢漂远。夜莺在树上唱起了歌，好像在为那封信伴奏，美妙极了。",
     url: "audio/ch3.mp3"
   },
   {
     title: "第4章",
-    text: "慢慢每天都来看望种子，用温柔的声音唱歌给它听，讲美丽的故事给它听。一天又一天，泥土里终于顶出了一点点嫩绿，小小的种子发芽了！慢慢高兴地跳起舞来。",
+    text: "月亮听到了歌声，弯弯地笑了，把银色的光铺满整片橘子林。橙橙坐在树根旁，感觉整个世界都温暖亮堂堂的。",
     url: "audio/ch4.mp3"
   },
   {
     title: "第5章",
-    text: "芽儿慢慢长高，长出了翠绿的叶子，最后开出了一簇簇小小的白色花朵。到了夜晚，那些花瓣会轻轻地发出柔和的光芒，就像落在地上的小星星，美极了。",
+    text: "好朋友小松鼠跑来了，毛茸茸的尾巴摇啊摇，说：我也想给月亮写信！两个小伙伴一起折了好多树叶小船，放进小溪里。",
     url: "audio/ch5.mp3"
   },
   {
     title: "第6章",
-    text: "小动物们都来欣赏星星花。小兔子、小狐狸、小松鼠，大家围坐在花园里，静静地看着那些闪光的花朵。月亮也探出了圆圆的脸，微笑着看这美丽温暖的花园。",
+    text: "小溪载着满满的信漂向远方，月亮越来越圆，光芒也越来越柔和，把睡意轻轻洒进森林的每一个角落。",
     url: "audio/ch6.mp3"
   },
   {
     title: "第7章",
-    text: "慢慢躺在星星花旁边，望着头顶的满天星星，心里充满了幸福。她闭上眼睛，微微地笑着，甜甜地睡着了。只要有梦想，就会有美丽的花开放。晚安，好梦，小朋友。",
+    text: "橙橙趴在松软的落叶堆里，望着月亮，心里暖暖的。她轻轻闭上眼睛，嘴角带着微笑睡着了。月亮守护着她，直到天亮。晚安，好梦，小朋友。",
     url: "audio/ch7.mp3"
   }
 ];
 
 let currentChapter = 0;
 let autoPlay = true;
-const player = document.getElementById("player");
+
+const player = document.getElementById('player');
+const nav = document.getElementById('chapterNav');
+
+// 生成章节按钮
+chapters.forEach((ch, i) => {
+  const btn = document.createElement('button');
+  btn.className = 'ch-btn' + (i === 0 ? ' active' : '');
+  btn.id = 'ch-' + i;
+  btn.textContent = ch.title;
+  btn.onclick = () => changeChapter(i);
+  nav.appendChild(btn);
+});
 
 function startStory() {
-  document.getElementById("startOverlay").style.display = "none";
-  renderChapterNav();
+  document.getElementById('overlay').style.display = 'none';
   loadChapter(0);
-  updateAutoToggle();
-}
-
-function renderChapterNav() {
-  const nav = document.getElementById("chapterNav");
-  nav.innerHTML = "";
-  chapters.forEach((ch, i) => {
-    const btn = document.createElement("button");
-    btn.className = "ch-btn" + (i === currentChapter ? " active" : "");
-    btn.textContent = "\u7b2c" + (i + 1) + "\u7ae0";
-    btn.onclick = () => changeChapter(i);
-    nav.appendChild(btn);
-  });
 }
 
 function loadChapter(idx) {
+  if (idx < 0 || idx >= chapters.length) return;
   currentChapter = idx;
   const ch = chapters[idx];
-  document.getElementById("chapterLabel").textContent = ch.title;
-  document.getElementById("chapterText").textContent = ch.text;
+
+  // 更新文本
+  document.getElementById('storyText').textContent = ch.text;
+
+  // 更新音频
   player.src = ch.url;
   player.load();
 
-  // 更新按钮状态
-  document.querySelectorAll(".ch-btn").forEach((btn, i) => {
-    btn.classList.toggle("active", i === idx);
+  // 更新按钮高亮
+  document.querySelectorAll('.ch-btn').forEach((b, i) => {
+    b.classList.toggle('active', i === idx);
   });
-  document.getElementById("prevBtn").disabled = idx === 0;
-  document.getElementById("nextBtn").disabled = idx === chapters.length - 1;
+
+  // 上下章按钮状态
+  document.getElementById('prevBtn').disabled = idx === 0;
+  document.getElementById('nextBtn').disabled = idx === chapters.length - 1;
 }
 
 function changeChapter(idx) {
   if (idx < 0 || idx >= chapters.length) return;
   loadChapter(idx);
+  player.play().catch(() => {});
 }
 
 function toggleAuto() {
   autoPlay = !autoPlay;
-  updateAutoToggle();
-}
-
-function updateAutoToggle() {
-  const dot = document.getElementById("autoToggle");
-  const label = document.getElementById("autoLabel");
-  dot.className = "toggle-dot" + (autoPlay ? " on" : "");
+  const dot = document.getElementById('autoToggle');
+  const label = document.getElementById('autoLabel');
+  dot.classList.toggle('on', autoPlay);
   label.textContent = autoPlay ? "自动连播" : "单章播放";
 }
 
-player.addEventListener("ended", () => {
+function updateAutoToggle() {
+  const dot = document.getElementById('autoToggle');
+  const label = document.getElementById('autoLabel');
+  dot.classList.toggle('on', autoPlay);
+  label.textContent = autoPlay ? "自动连播" : "单章播放";
+}
+
+// 音频结束自动跳下一章
+player.addEventListener('ended', () => {
   if (autoPlay && currentChapter < chapters.length - 1) {
-    loadChapter(currentChapter + 1);
-    player.play();
+    changeChapter(currentChapter + 1);
   }
 });
 
-// 初始化章节导航（遮罩层消失前先渲染）
-window.onload = function() {
-  renderChapterNav();
-  loadChapter(0);
-  updateAutoToggle();
-};
+// 初始化
+loadChapter(0);
+updateAutoToggle();
 </script>
 </body>
 </html>
