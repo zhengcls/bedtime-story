@@ -218,7 +218,7 @@
 
   <!-- 音频 -->
   <div class="audio-wrap">
-    <audio id="player" controls preload="none" playsinline webkit-playsinline></audio>
+    <audio id="player" controls preload="auto" playsinline webkit-playsinline x5-playsinline></audio>
   </div>
 
   <!-- 控制栏 -->
@@ -275,7 +275,8 @@ const chapters = [
 
 let currentChapter = 0;
 let autoPlay = true;
-let pendingPlay = false; // 熄屏期间翻章，需在亮屏后续播
+let isPlaying = false;        // 用户已启动播放（有手势授权）
+let waitingToPlay = false;    // 音频加载中，等 canplaythrough 后再 play
 
 const player = document.getElementById('player');
 const nav = document.getElementById('chapterNav');
@@ -292,38 +293,65 @@ chapters.forEach((ch, i) => {
 
 function startStory() {
   document.getElementById('overlay').style.display = 'none';
-  loadChapter(0);
-  player.play().catch(() => {});
+  isPlaying = true;
+  loadChapter(0, true);
 }
 
-function loadChapter(idx) {
+// idx: 要切换的章节索引
+// shouldPlay: 是否立即播放（有用户手势时为 true，自动翻章也为 true）
+function loadChapter(idx, shouldPlay) {
   if (idx < 0 || idx >= chapters.length) return;
   currentChapter = idx;
   const ch = chapters[idx];
 
   document.getElementById('storyText').textContent = ch.text;
 
-  player.src = ch.url;
-  player.load();
-
   document.querySelectorAll('.ch-btn').forEach((b, i) => {
     b.classList.toggle('active', i === idx);
   });
-
   document.getElementById('prevBtn').disabled = idx === 0;
   document.getElementById('nextBtn').disabled = idx === chapters.length - 1;
+
+  // 换源：先暂停，再换 src，等 canplaythrough 后播
+  player.pause();
+  waitingToPlay = !!shouldPlay;
+  player.src = ch.url;
+  player.load();
+  // 如果页面可见且需要播，立刻尝试（不等 canplaythrough，触发加载）
+  // canplaythrough 里会负责真正播放
 }
 
-function changeChapter(idx) {
-  if (idx < 0 || idx >= chapters.length) return;
-  loadChapter(idx);
-  if (document.hidden) {
-    // 页面不可见（熄屏/后台），先标记待播放
-    pendingPlay = true;
-  } else {
-    pendingPlay = false;
+// 音频可以流畅播放时触发（比 canplay 更可靠）
+player.addEventListener('canplaythrough', () => {
+  if (waitingToPlay && isPlaying) {
+    waitingToPlay = false;
     player.play().catch(() => {});
   }
+});
+
+// 兜底：canplaythrough 在某些安卓微信里不触发，用 canplay
+player.addEventListener('canplay', () => {
+  if (waitingToPlay && isPlaying) {
+    waitingToPlay = false;
+    player.play().catch(() => {});
+  }
+});
+
+// 音频播放结束，自动跳下一章
+player.addEventListener('ended', () => {
+  if (autoPlay && currentChapter < chapters.length - 1) {
+    // 熄屏也没关系：loadChapter 会设 waitingToPlay=true
+    // 音频加载好后 canplaythrough/canplay 自动触发 play()
+    // 移动端后台环境下 audio 元素仍然可以加载和触发 canplay
+    loadChapter(currentChapter + 1, true);
+  }
+});
+
+// 手动切章（用户点按钮）
+function changeChapter(idx) {
+  if (idx < 0 || idx >= chapters.length) return;
+  isPlaying = true; // 用户手势，解锁播放
+  loadChapter(idx, true);
 }
 
 function toggleAuto() {
@@ -341,31 +369,8 @@ function updateAutoToggle() {
   label.textContent = autoPlay ? "自动连播" : "单章播放";
 }
 
-// 音频结束自动跳下一章
-player.addEventListener('ended', () => {
-  if (autoPlay && currentChapter < chapters.length - 1) {
-    changeChapter(currentChapter + 1);
-  }
-});
-
-// 亮屏/切回前台时，如果有待播放任务则立即播
-document.addEventListener('visibilitychange', () => {
-  if (!document.hidden && pendingPlay) {
-    pendingPlay = false;
-    player.play().catch(() => {});
-  }
-});
-
-// iOS Safari 某些情况下用 pageshow 兜底
-window.addEventListener('pageshow', () => {
-  if (pendingPlay) {
-    pendingPlay = false;
-    player.play().catch(() => {});
-  }
-});
-
 // 初始化
-loadChapter(0);
+loadChapter(0, false);
 updateAutoToggle();
 </script>
 </body>
