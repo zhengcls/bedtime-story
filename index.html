@@ -1,304 +1,189 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>宝贝晚安 · 睡前故事</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:#0a0a2e;color:#fff;min-height:100vh;overflow-x:hidden}
-.wrap{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;min-height:100vh;padding:20px 16px}
-.moon{font-size:28px;margin:12px 0 0}
-.title{font-size:26px;font-weight:700;background:linear-gradient(135deg,#ffd700,#ffb347);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:4px 0 4px}
-.subtitle{font-size:13px;color:rgba(255,255,255,.45);margin-bottom:18px}
-.card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:24px 20px;max-width:560px;width:100%}
-.story-title{font-size:20px;font-weight:600;color:#ffd700;text-align:center;margin-bottom:4px}
-.chapter-title{font-size:15px;color:rgba(255,215,0,.6);text-align:center;margin-bottom:10px;font-weight:400}
-.text-box{min-height:160px;font-size:19px;line-height:2;color:rgba(255,255,255,.88);text-align:center;padding:8px 0;letter-spacing:.5px}
-.text-box .cursor{display:inline-block;width:2px;height:1em;background:#ffd700;vertical-align:text-bottom;margin-left:2px;-webkit-animation:blink .8s infinite;animation:blink .8s infinite}
-@-webkit-keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-.hint{color:rgba(255,255,255,.35);font-size:13px;text-align:center;padding:4px 0}
-.loading{color:rgba(255,215,0,.7);font-size:13px;text-align:center;padding:6px 0;display:none}
-.error-msg{color:#ff6b6b;font-size:13px;text-align:center;padding:6px 0;display:none}
-.controls{display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap}
-.btn{padding:10px 22px;border-radius:18px;border:1px solid rgba(255,215,0,.4);background:rgba(255,215,0,.1);color:#ffd700;font-size:15px;cursor:pointer;white-space:nowrap;-webkit-appearance:none;appearance:none}
-.btn.primary{background:#ffd700;color:#0a0a2e;font-weight:600;border-color:#ffd700}
-.btn:disabled{opacity:.4;cursor:default}
-.progress{display:flex;align-items:center;gap:8px;margin-top:14px;font-size:12px;color:rgba(255,255,255,.4)}
-.prog-bar{flex:1;height:3px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden}
-.prog-fill{height:100%;background:linear-gradient(90deg,#ffd700,#ffb347);width:0;transition:width .3s}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小海龟豆豆的寻星之旅</title>
+    <style>
+        body { 
+            margin: 0; padding: 20px;
+            background: linear-gradient(to bottom, #0a0a2e, #1a1a4e);
+            color: #fff;
+            font-family: "PingFang SC","Hiragino Sans GB","Microsoft YaHei",Arial,sans-serif;
+            text-align: center;
+            min-height: 100vh;
+        }
+        .container { max-width: 600px; margin: 0 auto; }
+        h1 { font-size: 1.8rem; margin-bottom: 10px; }
+        p { color: #aaa; margin-bottom: 30px; }
+        .start-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(10, 10, 46, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .start-btn {
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            color: #000; border: none;
+            padding: 20px 50px;
+            font-size: 1.5rem; font-weight: bold;
+            border-radius: 50px; cursor: pointer;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            animation: pulse 2s infinite;
+        }
+        .start-btn:active { transform: scale(0.95); }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.5); }
+            50% { box-shadow: 0 0 60px rgba(255, 215, 0, 0.8); }
+        }
+        .player { 
+            background: rgba(255,255,255,0.1); 
+            padding: 20px; border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        audio { width: 100%; margin-bottom: 15px; border-radius: 8px; }
+        .chapter-title { font-size: 1.2rem; margin-bottom: 10px; color: #ffd700; }
+        .chapter-text { text-align: left; line-height: 1.8; color: #ddd; margin-bottom: 15px; font-size: 1rem; }
+        .nav { display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; }
+        button { 
+            background: #ffd700; color: #000; border: none; 
+            padding: 10px 20px; border-radius: 5px; cursor: pointer;
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+        button:hover { background: #ffed4e; }
+        button:disabled { background: #666; cursor: not-allowed; }
+        button:active { transform: scale(0.96); }
+        .auto-badge { 
+            display: inline-block; background: #4CAF50; 
+            color: white; padding: 5px 15px; 
+            border-radius: 20px; font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+    </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="moon">&#127769;</div>
-  <div class="title">&#x5B9D;&#x8D1D;&#x665A;&#x5B89;</div>
-  <div class="subtitle">&#x4ECA;&#x65E5;&#x7761;&#x524D;&#x6545;&#x4E8B;</div>
-  <div class="card">
-    <div class="story-title" id="storyTitle"></div>
-    <div class="chapter-title" id="chTitle"></div>
-    <div class="text-box" id="textBox"></div>
-    <div class="hint" id="hintEl">&#x70B9;&#x51FB;&#x201C;&#x5F00;&#x59CB;&#x6717;&#x8BFB;&#x201D;&#x6536;&#x542C;&#x6545;&#x4E8B; &#x2022; &#x6BCF;&#x65E5;&#x81EA;&#x52A8;&#x66F4;&#x6362;</div>
-    <div class="loading" id="loadingEl">&#x23F3; &#x97F3;&#x9891;&#x52A0;&#x8F7D;&#x4E2D;...</div>
-    <div class="error-msg" id="errorEl"></div>
-    <div class="controls">
-      <button class="btn primary" id="playBtn">&#x5F00;&#x59CB;&#x6717;&#x8BFB;</button>
-      <button class="btn" id="prevBtn">&#x4E0A;&#x4E00;&#x7AE0;</button>
-      <button class="btn" id="nextBtn">&#x4E0B;&#x4E00;&#x7AE0;</button>
+    <div class="start-overlay" id="startOverlay">
+        <button class="start-btn" onclick="startPlaying()">
+            ⭐ 点击开始听故事 ⭐
+        </button>
     </div>
-    <div class="progress">
-      <span id="progText"></span>
-      <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+
+    <div class="container">
+        <h1>⭐ 小海龟豆豆的寻星之旅 ⭐</h1>
+        <p>睡前故事 · 女声朗读</p>
+        <div class="auto-badge" id="autoBadge">🔄 自动播放已开启</div>
+        
+        <div class="player">
+            <div class="chapter-title" id="title">第一章：星海的小海龟</div>
+            <audio id="player" controls preload="none" playsinline webkit-playsinline>
+                <source id="audioSource" src="audio/ch1.mp3" type="audio/mpeg">
+            </audio>
+            <div class="chapter-text" id="text">在蔚蓝的大海边，住着一只名叫豆豆的小海龟。豆豆有一个特别的爱好，就是每天晚上趴在沙滩上数星星。他总觉得自己听见过星星落在海面上的声音，叮咚一声，像一串银色的风铃。</div>
+        </div>
+        
+        <div class="nav">
+            <button id="prevBtn" onclick="prevChapter()">◀ 上一章</button>
+            <button id="nextBtn" onclick="nextChapter()">下一章 ▶</button>
+        </div>
+        
+        <div style="margin-top: 15px;">
+            <label style="cursor:pointer; color:#aaa; font-size:0.95rem;">
+                <input type="checkbox" id="autoPlayCheckbox" checked onchange="toggleAutoPlay()" style="margin-right:5px;">
+                自动播放下一章
+            </label>
+        </div>
+        
+        <div id="chapterList" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 20px;"></div>
     </div>
-  </div>
-</div>
-<!-- 关键修复: 在 HTML 中放置 audio 标签，确保微信 WebView 正确识别 -->
-<audio id="audioEl" preload="none" playsinline webkit-playsinline></audio>
 
-<script>
-(function() {
-  'use strict';
+    <script>
+        var autoPlayEnabled = true;
+        var currentIndex = 0;
+        
+        var chapters = [
+            {"title": "第一章：星海的小海龟", "text": "在蔚蓝的大海边，住着一只名叫豆豆的小海龟。豆豆有一个特别的爱好，就是每天晚上趴在沙滩上数星星。他总觉得自己听见过星星落在海面上的声音，叮咚一声，像一串银色的风铃。", "url": "audio/ch1.mp3"},
+            {"title": "第二章：流星划过", "text": "一天晚上，一颗流星划过天际，落在了远处的珊瑚礁旁。豆豆兴奋极了，他决定游过去找那颗星星。月光洒在海面上，像铺了一层银色的毯子，豆豆的小鳍轻轻划开波浪。", "url": "audio/ch2.mp3"},
+            {"title": "第三章：发光的水母", "text": "游啊游，豆豆遇到了一只发光的水母。水母名叫球球，浑身散发着蓝色的柔光。球球好奇地问豆豆：你要去哪里呀？豆豆说：我要去找落在海里的星星！球球想了想说：我陪你去吧，我的光可以帮你照亮路。", "url": "audio/ch3.mp3"},
+            {"title": "第四章：珊瑚森林", "text": "他们一起穿过了一片美丽的珊瑚森林。红色的珊瑚像小树，紫色的海葵像花朵，还有好多小鱼在中间游来游去。一只小丑鱼探出头来问：你们在找什么呢？豆豆说：在找一颗从天上掉下来的星星。", "url": "audio/ch4.mp3"},
+            {"title": "第五章：海底的星星", "text": "终于，豆豆在珊瑚礁的缝隙里发现了那颗星星，原来是一颗圆圆的、会发光的夜明珠。它安安静静地躺在那里，发出温暖的光芒，照亮了周围的每一块小石头。", "url": "audio/ch5.mp3"},
+            {"title": "第六章：海底灯会", "text": "豆豆轻轻用小鳍碰了碰夜明珠，它突然亮了好多倍，整个海底都被照得金灿灿的。海马、小螃蟹、海星都跑过来看热闹。大家围坐在一起，像开了一场海底的灯会。", "url": "audio/ch6.mp3"},
+            {"title": "第七章：晚安小海龟", "text": "豆豆抱着夜明珠慢慢游回了家。他把夜明珠放在沙滩上的小窝旁，整个夜晚都亮堂堂的。海浪轻轻拍着沙滩，像在唱一首温柔的摇篮曲。豆豆缩进壳里，甜甜地睡着了。晚安，小海龟。晚安，全世界。", "url": "audio/ch7.mp3"}
+        ];
 
-  // ========== 故事数据库（7个故事，按日期轮换） ==========
-  var STORIES = [
-    {
-      title: '\u5c0f\u6d77\u9f9f\u8c46\u8c46\u7684\u5bfb\u661f\u4e4b\u65c5',
-      chapters: [
-        '\u5728\u851a\u84dd\u7684\u5927\u6d77\u8fb9\uff0c\u4f4f\u7740\u4e00\u53ea\u540d\u53eb\u8c46\u8c46\u7684\u5c0f\u6d77\u9f9f\u3002\u8c46\u8c46\u6709\u4e00\u4e2a\u7279\u522b\u7684\u7231\u597d\uff0c\u5c31\u662f\u6bcf\u5929\u665a\u4e0a\u8db4\u5728\u6c99\u6ee9\u4e0a\u6570\u661f\u661f\u3002\u4ed6\u603b\u89c9\u5f97\u81ea\u5df1\u542c\u89c1\u8fc7\u661f\u661f\u843d\u5728\u6d77\u9762\u4e0a\u7684\u58f0\u97f3\uff0c\u53ee\u549a\u4e00\u58f0\uff0c\u50cf\u4e00\u4e32\u94f6\u8272\u7684\u98ce\u94c3\u3002',
-        '\u4e00\u5929\u665a\u4e0a\uff0c\u4e00\u9897\u6d41\u661f\u5212\u8fc7\u5929\u9645\uff0c\u843d\u5728\u4e86\u8fdc\u5904\u7684\u73ca\u7469\u7901\u65c1\u3002\u8c46\u8c46\u5174\u594b\u6781\u4e86\uff0c\u4ed6\u51b3\u5b9a\u6e38\u8fc7\u53bb\u627e\u90a3\u9897\u661f\u661f\u3002\u6708\u5149\u6d12\u5728\u6d77\u9762\u4e0a\uff0c\u50cf\u94fa\u4e86\u4e00\u5c42\u94f6\u8272\u7684\u6bef\u5b50\uff0c\u8c46\u8c46\u7684\u5c0f\u9cc5\u8f7b\u8f7b\u5212\u5f00\u6ce2\u6d6a\u3002',
-        '\u6e38\u554a\u6e38\uff0c\u8c46\u8c46\u9047\u5230\u4e86\u4e00\u53ea\u53d1\u5149\u7684\u6c34\u6bcd\u3002\u6c34\u6bcd\u540d\u53eb\u7403\u7403\uff0c\u6d51\u8eab\u6563\u53d1\u7740\u84dd\u8272\u7684\u67d4\u5149\u3002\u7403\u7403\u597d\u5947\u5730\u95ee\u8c46\u8c46\uff1a\u4f60\u8981\u53bb\u54ea\u91cc\u5440\uff1f\u8c46\u8c46\u8bf4\uff1a\u6211\u8981\u53bb\u627e\u843d\u5728\u6d77\u91cc\u7684\u661f\u661f\uff01\u7403\u7403\u60f3\u4e86\u60f3\u8bf4\uff1a\u6211\u966a\u4f60\u53bb\u5427\uff0c\u6211\u7684\u5149\u53ef\u4ee5\u5e2e\u4f60\u7167\u4eae\u8def\u3002',
-        '\u4ed6\u4eec\u4e00\u8d77\u7a7f\u8fc7\u4e86\u4e00\u7247\u7f8e\u4e3d\u7684\u73ca\u7469\u68ee\u6797\u3002\u7ea2\u8272\u7684\u73ca\u7469\u50cf\u5c0f\u6811\uff0c\u7d2b\u8272\u7684\u6d77\u8475\u50cf\u82b1\u6735\uff0c\u8fd8\u6709\u597d\u591a\u5c0f\u9c7c\u5728\u4e2d\u95f4\u6e38\u6765\u6e38\u53bb\u3002\u4e00\u53ea\u5c0f\u4e11\u9c7c\u63a2\u51fa\u5934\u6765\u95ee\uff1a\u4f60\u4eec\u5728\u627e\u4ec0\u4e48\u5462\uff1f\u8c46\u8c46\u8bf4\uff1a\u5728\u627e\u4e00\u9897\u4ece\u5929\u4e0a\u6389\u4e0b\u6765\u7684\u661f\u661f\u3002',
-        '\u7ec8\u4e8e\uff0c\u8c46\u8c46\u5728\u73ca\u7469\u7901\u7684\u7f1d\u9699\u91cc\u53d1\u73b0\u4e86\u90a3\u9897\u661f\u661f\uff0c\u539f\u6765\u662f\u4e00\u9897\u5706\u5706\u7684\u3001\u4f1a\u53d1\u5149\u7684\u591c\u660e\u73e0\u3002\u5b83\u5b89\u5b89\u9759\u9759\u5730\u8eba\u5728\u90a3\u91cc\uff0c\u53d1\u51fa\u6e29\u6696\u7684\u5149\u8292\uff0c\u7167\u4eae\u4e86\u5468\u56f4\u7684\u6bcf\u4e00\u5757\u5c0f\u77f3\u5934\u3002',
-        '\u8c46\u8c46\u8f7b\u8f7b\u7528\u5c0f\u9cc5\u78b0\u4e86\u78b0\u591c\u660e\u73e0\uff0c\u5b83\u7a81\u7136\u4eae\u4e86\u597d\u591a\u500d\uff0c\u6574\u4e2a\u6d77\u5e95\u90fd\u88ab\u7167\u5f97\u91d1\u707f\u707f\u7684\u3002\u6d77\u9a6c\u3001\u5c0f\u87c3\u87f9\u3001\u6d77\u661f\u90fd\u8dd1\u8fc7\u6765\u770b\u70ed\u95f9\u3002\u5927\u5bb6\u56f4\u5750\u5728\u4e00\u8d77\uff0c\u50cf\u5f00\u4e86\u4e00\u573a\u6d77\u5e95\u7684\u706f\u4f1a\u3002',
-        '\u8c46\u8c46\u62b1\u7740\u591c\u660e\u73e0\u6162\u6162\u6e38\u56de\u4e86\u5bb6\u3002\u4ed6\u628a\u591c\u660e\u73e0\u653e\u5728\u6c99\u6ee9\u4e0a\u7684\u5c0f\u7a9d\u65c1\uff0c\u6574\u4e2a\u591c\u665a\u90fd\u4eae\u5802\u5802\u7684\u3002\u6d77\u6d6a\u8f7b\u8f7b\u62cd\u7740\u6c99\u6ee9\uff0c\u50cf\u5728\u5531\u4e00\u9996\u6e29\u67d4\u7684\u6447\u7bee\u66f2\u3002\u8c46\u8c46\u7f29\u8fdb\u58f3\u91cc\uff0c\u751c\u751c\u5730\u7761\u7740\u4e86\u3002\u665a\u5b89\uff0c\u5c0f\u6d77\u9f9f\u3002\u665a\u5b89\uff0c\u5168\u4e16\u754c\u3002'
-      ]
-    }
-  ];
+        function getBaseUrl() {
+            var base = window.location.pathname;
+            base = base.substring(0, base.lastIndexOf('/') + 1);
+            return base || '/';
+        }
 
-  // ========== 状态变量 ==========
-  var currentStory = 0;
-  var currentCh = 0;
-  var isPlaying = false;
-  var typeTimer = null;
-  var typeIdx = 0;
-  var typeText = '';
+        function toggleAutoPlay() {
+            autoPlayEnabled = document.getElementById('autoPlayCheckbox').checked;
+            document.getElementById('autoBadge').textContent = autoPlayEnabled ? '🔄 自动播放已开启' : '⏸️ 自动播放已关闭';
+            document.getElementById('autoBadge').style.background = autoPlayEnabled ? '#4CAF50' : '#666';
+        }
 
-  // ========== DOM 引用 ==========
-  var audio = document.getElementById('audioEl');
-  var playBtn = document.getElementById('playBtn');
-  var prevBtn = document.getElementById('prevBtn');
-  var nextBtn = document.getElementById('nextBtn');
-  var textBox = document.getElementById('textBox');
-  var loadingEl = document.getElementById('loadingEl');
-  var errorEl = document.getElementById('errorEl');
-  var hintEl = document.getElementById('hintEl');
-  var storyTitleEl = document.getElementById('storyTitle');
-  var progTextEl = document.getElementById('progText');
-  var progFillEl = document.getElementById('progFill');
-  var chTitleEl = document.getElementById('chTitle');
+        function loadChapter(index) {
+            if (index < 0 || index >= chapters.length) return;
+            currentIndex = index;
+            var ch = chapters[index];
+            document.getElementById('title').textContent = ch.title;
+            document.getElementById('text').textContent = ch.text;
+            document.getElementById('audioSource').src = ch.url;
+            document.getElementById('player').load();
+            
+            if (autoPlayEnabled) {
+                document.getElementById('player').play().catch(function(e) { console.log('Auto-play blocked'); });
+            }
+            
+            document.getElementById('prevBtn').disabled = index === 0;
+            document.getElementById('nextBtn').disabled = index === chapters.length - 1;
+            var btns = document.querySelectorAll('.chapter-btn');
+            for (var i = 0; i < btns.length; i++) {
+                btns[i].style.background = i === index ? '#ffed4e' : '#ffd700';
+            }
+        }
 
-  var CH_NAMES = ['\u7B2C\u4E00\u7AE0','\u7B2C\u4E8C\u7AE0','\u7B2C\u4E09\u7AE0','\u7B2C\u56DB\u7AE0','\u7B2C\u4E94\u7AE0','\u7B2C\u516D\u7AE0','\u7B2C\u4E03\u7AE0'];
+        function prevChapter() {
+            if (currentIndex > 0) loadChapter(currentIndex - 1);
+        }
 
-  // ========== 工具函数 ==========
-  function $(id) { return document.getElementById(id); }
+        function nextChapter() {
+            if (currentIndex < chapters.length - 1) loadChapter(currentIndex + 1);
+        }
 
-  function getBaseUrl() {
-    // 确保音频路径始终正确，兼容微信各种 URL 格式
-    var base = window.location.pathname;
-    base = base.substring(0, base.lastIndexOf('/') + 1);
-    return base || '/';
-  }
+        function startPlaying() {
+            document.getElementById('startOverlay').style.display = 'none';
+            loadChapter(0);
+        }
 
-  function showEl(id, show) {
-    var el = $(id);
-    if (el) el.style.display = show ? 'block' : 'none';
-  }
+        var list = document.getElementById('chapterList');
+        for (var i = 0; i < chapters.length; i++) {
+            (function(idx) {
+                var btn = document.createElement('button');
+                btn.className = 'chapter-btn';
+                btn.textContent = '\u7B2C' + (idx + 1) + '\u7AE0';
+                btn.onclick = function() {
+                    if (document.getElementById('startOverlay').style.display !== 'none') {
+                        startPlaying();
+                    }
+                    loadChapter(idx);
+                };
+                list.appendChild(btn);
+            })(i);
+        }
 
-  function setError(msg) {
-    if (errorEl) { errorEl.textContent = msg; showEl('errorEl', true); }
-  }
-
-  function clearError() { showEl('errorEl', false); }
-
-  // ========== 打字机效果 ==========
-  function startTyping(text, callback) {
-    stopTyping();
-    typeIdx = 0;
-    typeText = text;
-    textBox.innerHTML = '<span id="typedText"></span><span class="cursor"></span>';
-    function typeChar() {
-      if (typeIdx < typeText.length) {
-        var typedEl = $('typedText');
-        if (typedEl) typedEl.textContent = typeText.substring(0, typeIdx + 1);
-        typeIdx++;
-        // 每个字符间隔 60ms，标点符号间隔 150ms
-        var ch = typeText.charAt(typeIdx - 1);
-        var delay = '\uff0c\u3002\uff01\uff1f\u2026'.indexOf(ch) >= 0 ? 150 : 60;
-        typeTimer = setTimeout(typeChar, delay);
-      } else {
-        // 打字完成，移除光标
-        var cursorEl = textBox.querySelector('.cursor');
-        if (cursorEl) cursorEl.style.display = 'none';
-        if (callback) callback();
-      }
-    }
-    typeChar();
-  }
-
-  function stopTyping() {
-    if (typeTimer) { clearTimeout(typeTimer); typeTimer = null; }
-  }
-
-  // 显示完整文本（不打字机效果）
-  function showFullText(text) {
-    stopTyping();
-    textBox.textContent = text;
-  }
-
-  // ========== 打字机效果（保留备用） ==========
-
-  function updateProgress() {
-    var story = STORIES[currentStory];
-    var total = story.chapters.length;
-    if (progTextEl) progTextEl.textContent = '\u7B2C ' + (currentCh + 1) + ' / ' + total + ' \u7AE0';
-    if (progFillEl) progFillEl.style.width = ((currentCh + 1) / total * 100) + '%';
-    if (chTitleEl) chTitleEl.textContent = CH_NAMES[currentCh] || ('\u7B2C ' + (currentCh + 1) + ' \u7AE0');
-  }
-    var story = STORIES[currentStory];
-    var total = story.chapters.length;
-    if (progTextEl) progTextEl.textContent = '\u7B2C ' + (currentCh + 1) + ' / ' + total + ' \u7AE0';
-    if (progFillEl) progFillEl.style.width = ((currentCh + 1) / total * 100) + '%';
-    if (chTitleEl) chTitleEl.textContent = CH_NAMES[currentCh] || ('\u7B2C ' + (currentCh + 1) + ' \u7AE0');
-  }
-
-  // ========== 核心播放逻辑 ==========
-  function stopAndLoad(chIdx) {
-    // 停止当前播放
-    stopTyping();
-    if (audio) { audio.pause(); audio.removeAttribute('src'); audio.load(); }
-    isPlaying = false;
-    playBtn.textContent = '\u5F00\u59CB\u6717\u8BFB';
-    showEl('loadingEl', false);
-    clearError();
-
-    // 加载新章节
-    currentCh = chIdx;
-    var story = STORIES[currentStory];
-    var text = story.chapters[currentCh];
-
-    // 直接显示完整文本
-    showFullText(text);
-    updateProgress();
-
-    if (hintEl) hintEl.style.display = 'block';
-  }
-
-  function doPlay() {
-    clearError();
-    var story = STORIES[currentStory];
-    var src = getBaseUrl() + 'audio/ch' + (currentCh + 1) + '.mp3';
-
-    // 首次播放或切换章节时设置音频源
-    if (audio.getAttribute('data-cur') !== src) {
-      audio.src = src;
-      audio.setAttribute('data-cur', src);
-      showEl('loadingEl', true);
-    }
-
-    if (hintEl) hintEl.style.display = 'none';
-
-    var p = audio.play();
-    if (p && typeof p.then === 'function') {
-      p.then(function() {
-        isPlaying = true;
-        playBtn.textContent = '\u6682\u505C';
-        showEl('loadingEl', false);
-      }).catch(function(err) {
-        showEl('loadingEl', false);
-        // 微信自动播放被拦截的提示
-        setError('\u8BF7\u70B9\u51FB\u64AD\u653E\u6309\u94AE\u5F00\u59CB\u6536\u542C');
-      });
-    } else {
-      isPlaying = true;
-      playBtn.textContent = '\u6682\u505C';
-      showEl('loadingEl', false);
-    }
-  }
-
-  // ========== 事件绑定 ==========
-  playBtn.addEventListener('click', function(e) {
-    if (e) e.preventDefault();
-    clearError();
-    if (!isPlaying) {
-      if (audio && audio.ended) { audio.currentTime = 0; }
-      doPlay();
-    } else {
-      if (audio) audio.pause();
-      isPlaying = false;
-      playBtn.textContent = '\u7EE7\u7EED\u6717\u8BFB';
-    }
-  });
-
-  prevBtn.addEventListener('click', function(e) {
-    if (e) e.preventDefault();
-    if (currentCh > 0) stopAndLoad(currentCh - 1);
-  });
-
-  nextBtn.addEventListener('click', function(e) {
-    if (e) e.preventDefault();
-    var story = STORIES[currentStory];
-    if (currentCh < story.chapters.length - 1) stopAndLoad(currentCh + 1);
-  });
-
-  if (audio) {
-    audio.addEventListener('ended', function() {
-      isPlaying = false;
-      var story = STORIES[currentStory];
-      if (currentCh < story.chapters.length - 1) {
-        // 自动翻到下一章并自动播放
-        currentCh++;
-        updateProgress();
-        var text = story.chapters[currentCh];
-        showFullText(text);
-        playBtn.textContent = '\u6682\u505C';
-        // 延迟800ms后自动播放下一章，给翻页动画留时间
-        setTimeout(function() { doPlay(); }, 800);
-      } else {
-        // 全部播完
-        if (progFillEl) progFillEl.style.width = '100%';
-        playBtn.textContent = '\u91CD\u65B0\u64AD\u653E';
-        currentCh = 0;
-        updateProgress();
-        showFullText(story.chapters[0]);
-      }
-    });
-
-    audio.addEventListener('error', function() {
-      showEl('loadingEl', false);
-      setError('\u97F3\u9891\u52A0\u8F7D\u5931\u8D25\uFF0C\u8BF7\u68C0\u67E5\u7F51\u7EDC\u540E\u91CD\u8BD5');
-    });
-  }
-
-  // ========== 初始化 ==========
-  function init() {
-    try {
-      var story = STORIES[currentStory];
-      storyTitleEl.textContent = story.title;
-      document.title = '\u5B9D\u8D1D\u665A\u5B89 \xB7 ' + story.title;
-
-      updateProgress();
-
-      // 显示第一章完整文本
-      var text = story.chapters[0];
-      showFullText(text);
-    } catch(e) {
-      document.body.innerHTML = '<p style="color:red;padding:20px;font-size:14px;">\u52A0\u8F7D\u5931\u8D25: ' + e.message + '</p>';
-    }
-  }
-
-  init();
-})();
-</script>
+        document.getElementById('player').addEventListener('ended', function() {
+            if (autoPlayEnabled && currentIndex < chapters.length - 1) {
+                setTimeout(function() {
+                    loadChapter(currentIndex + 1);
+                }, 1000);
+            }
+        });
+    </script>
 </body>
 </html>
