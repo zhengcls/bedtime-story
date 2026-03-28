@@ -1,8 +1,8 @@
 import urllib.request, json
 
 webhook = "https://open.feishu.cn/open-apis/bot/v2/hook/f7b32472-16fb-40c1-8860-fec21f13db66"
-story_title = "小兔子跳跳的星星花园"
-story_desc = "善良的跳跳帮助受伤的小萤火虫回家，收获了满山坡的萤火虫灯笼"
+story_title = "小狐狸暖暖的彩虹桥"
+story_desc = "善良的小狐狸暖暖帮助森林小伙伴们找回快乐，让褪色的彩虹重新绽放光芒"
 url = "https://zhengcls.github.io/bedtime-story/"
 
 card = {
