@@ -14,9 +14,6 @@ body{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;b
 .card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:24px 20px;max-width:560px;width:100%}
 .story-title{font-size:20px;font-weight:600;color:#ffd700;text-align:center;margin-bottom:4px}
 .chapter-title{font-size:15px;color:rgba(255,215,0,.6);text-align:center;margin-bottom:10px;font-weight:400}
-.chapter-nav{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:12px 0 16px}
-.ch-btn{width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,215,0,.3);background:rgba(255,215,0,.08);color:#ffd700;font-size:13px;cursor:pointer;-webkit-appearance:none;appearance:none}
-.ch-btn.active{background:#ffd700;color:#0a0a2e;font-weight:700;border-color:#ffd700}
 .text-box{min-height:160px;font-size:19px;line-height:2;color:rgba(255,255,255,.88);text-align:center;padding:8px 0;letter-spacing:.5px}
 .text-box .cursor{display:inline-block;width:2px;height:1em;background:#ffd700;vertical-align:text-bottom;margin-left:2px;-webkit-animation:blink .8s infinite;animation:blink .8s infinite}
 @-webkit-keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
@@ -41,7 +38,6 @@ body{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;b
   <div class="card">
     <div class="story-title" id="storyTitle"></div>
     <div class="chapter-title" id="chTitle"></div>
-    <div class="chapter-nav" id="chNav"></div>
     <div class="text-box" id="textBox"></div>
     <div class="hint" id="hintEl">&#x70B9;&#x51FB;&#x201C;&#x5F00;&#x59CB;&#x6717;&#x8BFB;&#x201D;&#x6536;&#x542C;&#x6545;&#x4E8B; &#x2022; &#x6BCF;&#x65E5;&#x81EA;&#x52A8;&#x66F4;&#x6362;</div>
     <div class="loading" id="loadingEl">&#x23F3; &#x97F3;&#x9891;&#x52A0;&#x8F7D;&#x4E2D;...</div>
@@ -160,34 +156,15 @@ body{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;b
     textBox.textContent = text;
   }
 
-  // ========== 导航 ==========
-  function buildNav() {
-    var nav = $('chNav');
-    if (!nav) return;
-    var story = STORIES[currentStory];
-    nav.innerHTML = '';
-    for (var i = 0; i < story.chapters.length; i++) {
-      (function(idx) {
-        var b = document.createElement('button');
-        b.className = 'ch-btn' + (idx === currentCh ? ' active' : '');
-        b.textContent = idx + 1;
-        b.setAttribute('data-ch', idx);
-        b.addEventListener('click', function() {
-          stopAndLoad(idx);
-        });
-        nav.appendChild(b);
-      })(i);
-    }
-  }
-
-  function updateNav() {
-    var btns = document.querySelectorAll('.ch-btn');
-    for (var i = 0; i < btns.length; i++) {
-      btns[i].className = (i === currentCh) ? 'ch-btn active' : 'ch-btn';
-    }
-  }
+  // ========== 打字机效果（保留备用） ==========
 
   function updateProgress() {
+    var story = STORIES[currentStory];
+    var total = story.chapters.length;
+    if (progTextEl) progTextEl.textContent = '\u7B2C ' + (currentCh + 1) + ' / ' + total + ' \u7AE0';
+    if (progFillEl) progFillEl.style.width = ((currentCh + 1) / total * 100) + '%';
+    if (chTitleEl) chTitleEl.textContent = CH_NAMES[currentCh] || ('\u7B2C ' + (currentCh + 1) + ' \u7AE0');
+  }
     var story = STORIES[currentStory];
     var total = story.chapters.length;
     if (progTextEl) progTextEl.textContent = '\u7B2C ' + (currentCh + 1) + ' / ' + total + ' \u7AE0';
@@ -212,7 +189,6 @@ body{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;b
 
     // 直接显示完整文本
     showFullText(text);
-    updateNav();
     updateProgress();
 
     if (hintEl) hintEl.style.display = 'block';
@@ -282,7 +258,6 @@ body{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;b
       if (currentCh < story.chapters.length - 1) {
         // 自动翻到下一章并自动播放
         currentCh++;
-        updateNav();
         updateProgress();
         var text = story.chapters[currentCh];
         showFullText(text);
@@ -294,7 +269,6 @@ body{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;b
         if (progFillEl) progFillEl.style.width = '100%';
         playBtn.textContent = '\u91CD\u65B0\u64AD\u653E';
         currentCh = 0;
-        buildNav();
         updateProgress();
         showFullText(story.chapters[0]);
       }
@@ -313,7 +287,6 @@ body{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;b
       storyTitleEl.textContent = story.title;
       document.title = '\u5B9D\u8D1D\u665A\u5B89 \xB7 ' + story.title;
 
-      buildNav();
       updateProgress();
 
       // 显示第一章完整文本
