@@ -1,8 +1,8 @@
 import urllib.request, json
 
 webhook = "https://open.feishu.cn/open-apis/bot/v2/hook/f7b32472-16fb-40c1-8860-fec21f13db66"
-story_title = "小松鼠栗栗的许愿风铃"
-story_desc = "小松鼠栗栗用银杏叶和贝壳做了一串风铃，叮当声中，所有小动物的烦恼都被吹走了"
+story_title = "小獾果果的星星糖果罐"
+story_desc = "小獾果果的糖果罐里掉进了一颗小星星，分给朋友们品尝后，每个人都做了一个甜甜的梦"
 url = "https://zhengcls.github.io/bedtime-story/"
 
 card = {
