@@ -86,7 +86,18 @@
         "usedAt": 1775692521951,
         "industryId": "06-Product"
       }
+    ],
+    "a35cfaa26d7f4d0db1729cfb97124c5b": [
+      {
+        "expertId": "ApiTestingExpert",
+        "name": "Harper",
+        "profession": "API测试专家",
+        "avatarUrl": "https://acc-1258344699.cos.accelerate.myqcloud.com/workbuddy/experts/avatars/08-QualityAssurance/ApiTestingExpert/ApiTestingExpert.png",
+        "promptUrl": "https://acc-1258344699.cos.accelerate.myqcloud.com/workbuddy/experts/experts/08-QualityAssurance/ApiTestingExpert/ApiTestingExpert_zh.md",
+        "usedAt": 1775720309122,
+        "industryId": "08-QualityAssurance"
+      }
     ]
   },
-  "lastUpdated": 1775695269267
+  "lastUpdated": 1775776797438
 }
