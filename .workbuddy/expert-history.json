@@ -66,7 +66,27 @@
         "usedAt": 1775090882987,
         "industryId": "all"
       }
+    ],
+    "9a77b419e4b842ee9ee1f2a66adf32f9": [
+      {
+        "expertId": "DocumentGenerationExpert",
+        "name": "Lark",
+        "profession": "文档生成专家",
+        "avatarUrl": "https://acc-1258344699.cos.accelerate.myqcloud.com/workbuddy/experts/avatars/11-ProfessionalServices/DocumentGenerationExpert/DocumentGenerationExpert.png",
+        "promptUrl": "https://acc-1258344699.cos.accelerate.myqcloud.com/workbuddy/experts/experts/11-ProfessionalServices/DocumentGenerationExpert/DocumentGenerationExpert_zh.md",
+        "usedAt": 1775695257010,
+        "industryId": "11-ProfessionalServices"
+      },
+      {
+        "expertId": "TrendResearcher",
+        "name": "Zara",
+        "profession": "行业趋势专家",
+        "avatarUrl": "https://acc-1258344699.cos.accelerate.myqcloud.com/workbuddy/experts/avatars/06-Product/TrendResearcher/TrendResearcher.png",
+        "promptUrl": "https://acc-1258344699.cos.accelerate.myqcloud.com/workbuddy/experts/experts/06-Product/TrendResearcher/TrendResearcher_zh.md",
+        "usedAt": 1775692521951,
+        "industryId": "06-Product"
+      }
     ]
   },
-  "lastUpdated": 1775092706532
+  "lastUpdated": 1775695269267
 }

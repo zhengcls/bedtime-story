@@ -1,8 +1,8 @@
 import urllib.request, json
 
 webhook = "https://open.feishu.cn/open-apis/bot/v2/hook/f7b32472-16fb-40c1-8860-fec21f13db66"
-story_title = "小猫咪球的星星风筝"
-story_desc = "小猫咪球和小燕子吱吱一起制作了一个画满星星的风筝，让它在晚风中飞向天边，跟真正的星星说晚安"
+story_title = "小浣熊团团的梦境图书馆"
+story_desc = "在星光森林深处，圆滚滚的小浣熊团团经营着一家神奇的图书馆，他把故事书里的甜美梦境一个一个送给森林里的小朋友们"
 url = "https://zhengcls.github.io/bedtime-story/"
 
 card = {
