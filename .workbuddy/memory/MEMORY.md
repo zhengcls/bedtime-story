@@ -223,6 +223,7 @@ git push origin main
 - 线上地址：https://zhengcls.github.io/bedtime-story/
 - **必须执行 cache_bust.py**，否则用户会因浏览器缓存听到旧音频
 - 中文路径偶尔 push 失败，失败时重试一次
+- **push 成功后必须用 web_fetch 验证线上 index.html 的标题是否已更新为新故事**（防止 GitHub Pages 延迟或缓存导致用户看到旧故事）
 
 ---
 

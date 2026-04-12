@@ -1,8 +1,8 @@
 import urllib.request, json
 
 webhook = "https://open.feishu.cn/open-apis/bot/v2/hook/f7b32472-16fb-40c1-8860-fec21f13db66"
-story_title = "小刺猬嘟嘟的月光灯笼"
-story_desc = "在森林深处的枫叶林里，小刺猬嘟嘟捡到了一个月光灯笼，每天夜晚用温柔的光送每一位森林伙伴安全回家"
+story_title = "小蜗牛慢慢的花籽信"
+story_desc = "小蜗牛慢慢带着一颗闪着蓝光的花籽踏上旅途，在荒凉的石头地上种出了一片会发光的蓝色花海"
 url = "https://zhengcls.github.io/bedtime-story/"
 
 card = {
