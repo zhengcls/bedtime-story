@@ -1,8 +1,8 @@
 import urllib.request, json
 
 webhook = "https://open.feishu.cn/open-apis/bot/v2/hook/f7b32472-16fb-40c1-8860-fec21f13db66"
-story_title = "小燕子咕咕的云端邮局"
-story_desc = "小燕子咕咕在云端邮局收到一封没有地址的信，踏上了帮银杏叶找到主人的温暖旅程"
+story_title = "小鼹鼠阿泥的泥土派对"
+story_desc = "小鼹鼠阿泥发现一块闪闪发光的红泥土，决定举办一场特别的泥土派对，邀请所有邻居来分享他的收藏"
 url = "https://zhengcls.github.io/bedtime-story/"
 
 card = {
